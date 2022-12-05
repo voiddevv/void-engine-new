@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxTimer;
 import scripting.Hscript;
 import flixel.FlxSprite;
 import flixel.animation.FlxBaseAnimation;
@@ -9,6 +10,7 @@ using StringTools;
 
 class Character extends FlxSprite
 {
+	public var canDance:Bool = true;
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
 
@@ -88,8 +90,6 @@ class Character extends FlxSprite
 		super.update(elapsed);
 	}
 
-	private var danced:Bool = false;
-
 	/**
 	 * 
 	 */
@@ -104,8 +104,17 @@ class Character extends FlxSprite
 		}
 	}
 
-	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
+	public function playAnim(AnimName:String, Force:Bool = false, timer:Float = 0, Reversed:Bool = false, Frame:Int = 0):Void
 	{
+		if (timer > 0.0)
+		{
+			canDance = false;
+			new FlxTimer().start(timer, function(tmr:FlxTimer)
+			{
+				canDance = true;
+			});
+		}
+
 		animation.play(AnimName, Force, Reversed, Frame);
 
 		var daOffset = animOffsets.get(animation.curAnim.name);

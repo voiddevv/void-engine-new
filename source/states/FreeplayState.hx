@@ -1,5 +1,6 @@
 package states;
 
+import openfl.media.Sound;
 import gameplay.GamePlay;
 import flash.text.TextField;
 import flixel.FlxG;
@@ -81,12 +82,14 @@ class FreeplayState extends MusicBeatState
 			songs.push('Thorns');
 			// songs.push('Winter-Horrorland');
 		}
+		for (i in songs){
+			openfl.Assets.cache.setSound(Paths.inst(i),new openfl.media.Sound());
+		}
+			// LOAD MUSIC
 
-		// LOAD MUSIC
+			// LOAD CHARACTERS
 
-		// LOAD CHARACTERS
-
-		var bg:FlxSprite = new FlxSprite().loadGraphic('assets/images/menuBGBlue.png');
+			var bg:FlxSprite = new FlxSprite().loadGraphic('assets/images/menuBGBlue.png');
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -231,7 +234,6 @@ class FreeplayState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-
 		FlxG.sound.play('assets/sounds/scrollMenu' + TitleState.soundExt, 0.4);
 
 		curSelected += change;
@@ -248,7 +250,7 @@ class FreeplayState extends MusicBeatState
 		// lerpScore = 0;
 		#end
 
-		FlxG.sound.playMusic('assets/music/' + songs[curSelected] + "_Inst" + TitleState.soundExt, 0);
+		FlxG.sound.playMusic(Paths.inst(songs[curSelected]));
 
 		var bullShit:Int = 0;
 

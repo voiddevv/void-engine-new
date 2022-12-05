@@ -43,6 +43,8 @@ class Note extends FlxSprite
 		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
+		if(GamePlay.downScroll)
+			y = 2000;
 		this.strumTime = strumTime;
 
 		this.noteData = noteData;
@@ -175,7 +177,7 @@ class Note extends FlxSprite
 			else
 				canBeHit = false;
 
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset - 80)
+			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset - 125)
 				tooLate = true;
 		}
 		else

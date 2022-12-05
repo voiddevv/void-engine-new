@@ -30,6 +30,9 @@ class UI extends FlxSpriteGroup
 		playerStrum.screenCenter(X);
 		add(dadStrum);
 		dadStrum.screenCenter(X);
+		if(GamePlay.downScroll){
+			dadStrum.y = FlxG.height*0.7;
+		}
 		dadStrum.x -= 350;
 		playerStrum.x += 350;
 		healthBarBg.loadGraphic(Paths.image("healthBar"));
@@ -63,6 +66,8 @@ class UI extends FlxSpriteGroup
 		dadIcon.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (dadIcon.width - iconOffset);
 		scoretext.text = 'Score: ${GamePlay.instance.songscore} | Misses: ${GamePlay.instance.misses} | Accuracy: ${FlxMath.roundDecimal(GamePlay.instance.accuracy * 100,3)}% | Rank: ${GamePlay.instance.rank}';
 		scoretext.screenCenter(X);
+		if(GamePlay.instance.health > 1.6)
+			dadIcon.animation.play("icon",true,false,1);
 
 	}
 

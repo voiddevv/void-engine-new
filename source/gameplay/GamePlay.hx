@@ -1,5 +1,6 @@
 package gameplay;
 
+import openfl.Assets;
 import scripting.Hscript;
 import flixel.text.FlxText;
 import openfl.events.KeyboardEvent;
@@ -24,6 +25,7 @@ class GamePlay extends MusicBeatState
 {
 	public static var instance:GamePlay;
 	public static var SONG:SwagSong;
+	public static var downScroll:Bool = false;
 
 	public var UI:UI;
 	public var notes:FlxTypedSpriteGroup<Note>;
@@ -207,6 +209,7 @@ class GamePlay extends MusicBeatState
 			// generateSong('fresh');
 		}, 5);
 	}
+
 	// TODO REWIRTE THE DOWN HERE
 	private function popUpScore(strumtime:Float):Void
 	{
@@ -395,7 +398,7 @@ class GamePlay extends MusicBeatState
 						daNote.active = true;
 					}
 					daNote.y = (UI.dadStrum.members[daNote.noteData].y
-						- (Conductor.songPosition - daNote.strumTime) * (0.5 * FlxMath.roundDecimal(SONG.speed, 2)));
+					 	- (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
 
 					// i am so fucking sorry for this if condition
 					if (daNote.isSustainNote
@@ -414,15 +417,6 @@ class GamePlay extends MusicBeatState
 					{
 						// if (SONG.song != 'Tutorial')
 						// 	camZooming = true;
-
-						var altAnim:String = "";
-
-						if (SONG.notes[Math.floor(curStep / 16)] != null)
-						{
-							if (SONG.notes[Math.floor(curStep / 16)].altAnim)
-								altAnim = '-alt';
-						}
-
 						dadNoteHit(daNote);
 					}
 
@@ -475,6 +469,13 @@ class GamePlay extends MusicBeatState
 
 	function dadNoteHit(note:Note)
 	{
+		var altAnim:String = "";
+
+		if (SONG.notes[Math.floor(curStep / 16)] != null)
+		{
+			if (SONG.notes[Math.floor(curStep / 16)].altAnim)
+				altAnim = '-alt';
+		}
 		modChart.call("onDadHit");
 		dad.holdTimer = 0;
 		var dirs = ["LEFT", "DOWN", "UP", "RIGHT"];
@@ -538,7 +539,6 @@ class GamePlay extends MusicBeatState
 	}
 
 	public var closestNotes:Array<Note> = [];
-
 	var keys = [false, false, false, false];
 
 	private function handleInput(evt:KeyboardEvent):Void
@@ -781,7 +781,16 @@ class GamePlay extends MusicBeatState
 				bf.dance();
 		}
 	}
-
+	public function syncAudio() {
+		FlxG.sound.music.time = Conductor.songPosition;
+		voices.time = Conductor.songPosition;
+	}
+	override function stepHit() {
+		super.stepHit();
+		trace(Conductor.songPosition - FlxG.sound.music.time);
+		if(Conductor.songPosition - FlxG.sound.music.time > 20||Conductor.songPosition - FlxG.sound.music.time < -20)
+			syncAudio();
+	}
 	override function beatHit()
 	{
 		super.beatHit();
