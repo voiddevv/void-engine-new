@@ -1,5 +1,6 @@
 package gameplay;
 
+import flixel.text.FlxText;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
@@ -12,6 +13,7 @@ class UI extends FlxSpriteGroup
 
 	public static var instance:UI;
 
+	public var scoretext:FlxText;
 	public var playerStrum = new StrumLine();
 	public var dadStrum = new StrumLine();
 	public var healthBarBg:FlxSprite = new FlxSprite(0, FlxG.height * 0.9);
@@ -22,6 +24,7 @@ class UI extends FlxSpriteGroup
 	public function new()
 	{
 		super();
+		scoretext = new FlxText(0,0,0,'Score: ${GamePlay.instance.songscore} | Misses: ${GamePlay.instance.misses} | Accuracy: ${GamePlay.instance.accuracy * 100} | Rank: ${GamePlay.instance.rank}',16);
 		instance = this;
 		add(playerStrum);
 		playerStrum.screenCenter(X);
@@ -39,7 +42,11 @@ class UI extends FlxSpriteGroup
 		healthBar.x = healthBarBg.x + 4;
 		add(dadIcon);
 		add(bfIcon);
-        bfIcon.y = dadIcon.y = FlxG.height*0.8;
+		bfIcon.y = dadIcon.y = FlxG.height * 0.8;
+		scoretext.y = FlxG.height*0.95;
+		scoretext.setFormat(Paths.font("vcr.ttf"),18,FlxColor.WHITE,CENTER,OUTLINE,FlxColor.BLACK);
+		add(scoretext);
+		scoretext.screenCenter(X);
 	}
 
 	override function update(elapsed:Float)
@@ -54,9 +61,14 @@ class UI extends FlxSpriteGroup
 		var iconOffset:Int = 26;
 		bfIcon.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		dadIcon.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (dadIcon.width - iconOffset);
+		scoretext.text = 'Score: ${GamePlay.instance.songscore} | Misses: ${GamePlay.instance.misses} | Accuracy: ${FlxMath.roundDecimal(GamePlay.instance.accuracy * 100,3)}% | Rank: ${GamePlay.instance.rank}';
+		scoretext.screenCenter(X);
+
 	}
-    public function iconBump() {
-        dadIcon.scale.set(1.2,1.2);
-        bfIcon.scale.set(1.2,1.2);
-    }
+
+	public function iconBump()
+	{
+		dadIcon.scale.set(1.2, 1.2);
+		bfIcon.scale.set(1.2, 1.2);
+	}
 }

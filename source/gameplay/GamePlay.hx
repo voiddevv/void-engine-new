@@ -25,9 +25,10 @@ class GamePlay extends MusicBeatState
 	public static var instance:GamePlay;
 	public static var SONG:SwagSong;
 
-	var UI:UI;
-	var notes:FlxTypedSpriteGroup<Note>;
-	var unspawnNotes:Array<Note> = [];
+	public var UI:UI;
+	public var notes:FlxTypedSpriteGroup<Note>;
+	public var unspawnNotes:Array<Note> = [];
+
 	var dadGroup = new FlxTypedSpriteGroup<Character>();
 	var dad:Character;
 	var bfGroup = new FlxTypedSpriteGroup<Boyfriend>();
@@ -37,7 +38,9 @@ class GamePlay extends MusicBeatState
 	var stage:Stage;
 	var camGame = FlxG.camera;
 	var camHUD:FlxCamera;
-	var gennedsong:Bool = false;
+
+	public var gennedsong:Bool = false;
+
 	var modChart = new Hscript();
 
 	public var combo:Int = 0;
@@ -93,7 +96,7 @@ class GamePlay extends MusicBeatState
 		camHUD.bgColor = 0x0;
 		instance = this;
 		FlxG.cameras.add(camHUD, false);
-		stage = new Stage();
+		stage = new Stage(SONG.stage);
 		bf = new Boyfriend(770, 450, SONG.player1);
 		dad = new Character(100, 100, SONG.player2);
 		gf = new Character(400, 130, "gf");
@@ -109,7 +112,10 @@ class GamePlay extends MusicBeatState
 		add(UI);
 		UI.cameras = [camHUD];
 		modChart.call("createPost");
-
+		notes = new FlxTypedSpriteGroup<Note>();
+		notes.cameras = [camHUD];
+		add(notes);
+		ChartParser.parse(SONG.song, 'hard');
 		startCountdown();
 	}
 
@@ -126,8 +132,7 @@ class GamePlay extends MusicBeatState
 		// inCutscene = false;
 		// talking = false;
 		// startedCountdown = true;
-		Conductor.songPosition = -5000;
-		Conductor.songPosition -= Conductor.crochet * 5;
+		Conductor.songPosition = -Conductor.crochet * 5;
 		modChart.call("onCountDown");
 
 		var swagCounter:Int = 0;
@@ -194,7 +199,6 @@ class GamePlay extends MusicBeatState
 					});
 					FlxG.sound.play('assets/sounds/introGo' + altSuffix + TitleState.soundExt, 0.6);
 				case 4:
-					gensong(SONG.song);
 					startMusic();
 					gennedsong = true;
 			}
@@ -203,90 +207,6 @@ class GamePlay extends MusicBeatState
 			// generateSong('fresh');
 		}, 5);
 	}
-
-	private function gensong(dataPath:String):Void
-	{
-		Conductor.songPosition = -5000;
-		// FlxG.log.add(ChartParser.parse());
-
-		var songData = SONG;
-		Conductor.changeBPM(songData.bpm);
-
-		notes = new FlxTypedSpriteGroup<Note>();
-		add(notes);
-		notes.cameras = [camHUD];
-
-		var noteData:Array<SwagSection>;
-
-		// NEW SHIT
-		noteData = songData.notes;
-		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
-		for (section in noteData)
-		{
-			var coolSection:Int = Std.int(section.lengthInSteps / 4);
-
-			for (songNotes in section.sectionNotes)
-			{
-				var daStrumTime:Float = songNotes[0];
-				var daNoteData:Int = Std.int(songNotes[1] % 4);
-
-				var gottaHitNote:Bool = section.mustHitSection;
-
-				if (songNotes[1] > 3)
-				{
-					gottaHitNote = !section.mustHitSection;
-				}
-
-				var oldNote:Note;
-				if (unspawnNotes.length > 0)
-					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
-				else
-					oldNote = null;
-
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
-				swagNote.sustainLength = songNotes[2];
-				swagNote.scrollFactor.set(0, 0);
-
-				var susLength:Float = swagNote.sustainLength;
-
-				susLength = susLength / Conductor.stepCrochet;
-				unspawnNotes.push(swagNote);
-
-				for (susNote in 0...Math.floor(susLength))
-				{
-					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
-
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
-					sustainNote.scrollFactor.set();
-					unspawnNotes.push(sustainNote);
-
-					sustainNote.mustPress = gottaHitNote;
-
-					if (sustainNote.mustPress)
-					{
-						sustainNote.x += FlxG.width / 2; // general offset
-					}
-				}
-
-				swagNote.mustPress = gottaHitNote;
-
-				if (swagNote.mustPress)
-				{
-					swagNote.x += FlxG.width / 2; // general offset
-				}
-				else
-				{
-				}
-			}
-			daBeats += 1;
-		}
-
-		// trace(unspawnNotes.length);
-		// playerCounter += 1;
-
-		unspawnNotes.sort(sortByShit);
-	}
-
 	// TODO REWIRTE THE DOWN HERE
 	private function popUpScore(strumtime:Float):Void
 	{
@@ -430,11 +350,11 @@ class GamePlay extends MusicBeatState
 	{
 		super.update(elapsed);
 		modChart.call("update", [elapsed]);
-        if(health > maxHealth)
-            health = 2;
+		if (health > maxHealth)
+			health = 2;
+		Conductor.songPosition += elapsed * 1000;
 		if (gennedsong)
 		{
-			Conductor.songPosition = FlxG.sound.music.time;
 			FlxG.sound.music.onComplete = endSong;
 			if (unspawnNotes[0] != null)
 			{
@@ -464,7 +384,6 @@ class GamePlay extends MusicBeatState
 						if (daNote.isSustainNote)
 							daNote.x += 38;
 					}
-
 					if (daNote.y > FlxG.height)
 					{
 						daNote.active = false;
@@ -475,7 +394,6 @@ class GamePlay extends MusicBeatState
 						daNote.visible = true;
 						daNote.active = true;
 					}
-
 					daNote.y = (UI.dadStrum.members[daNote.noteData].y
 						- (Conductor.songPosition - daNote.strumTime) * (0.5 * FlxMath.roundDecimal(SONG.speed, 2)));
 
@@ -883,7 +801,7 @@ class GamePlay extends MusicBeatState
 		modChart.call("onEndSong");
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, releaseInput);
-		MemUtill.clear();
+		MemUtil.clear();
 		FlxG.switchState(new MainMenuState());
 	}
 }

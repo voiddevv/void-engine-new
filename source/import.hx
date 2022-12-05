@@ -1,4 +1,4 @@
 import flixel.FlxG;
-import utills.*;
+import utils.*;
 import states.*;
 import Paths;

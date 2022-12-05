@@ -9,7 +9,13 @@ class Stage extends FlxSpriteGroup {
         super();
         var camzoom = 1.05;
         script.interp.scriptObject = this;
-        script.loadScript('images/stages/$stage/stage');
+        try{
+            script.loadScript('images/stages/$stage/stage');
+        }
+        catch(e){
+            trace(e.details());
+            script.loadScript('images/stages/stage/stage');
+        }
         script.call("new");
     }
     override function update(elapsed:Float) {

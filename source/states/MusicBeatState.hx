@@ -1,6 +1,5 @@
 package states;
 
-import utills.MemUtill;
 import Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.addons.transition.FlxTransitionableState;
@@ -78,7 +77,7 @@ class MusicBeatState extends FlxUIState
 		//do literally nothing dumbass
 	}
 	override function destroy() {
-		MemUtill.clear();
+		MemUtil.clear();
 		super.destroy();
 	}
 }

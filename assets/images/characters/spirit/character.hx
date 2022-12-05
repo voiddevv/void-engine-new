@@ -1,5 +1,5 @@
 function new(){
-    frames = Paths.getCharacterPacker(curCharacter);
+    frames = Paths.getCharacter("PACKER",curCharacter);
     animation.addByPrefix('idle', "idle spirit_", 24, false);
     animation.addByPrefix('singUP', "up_", 24, false);
     animation.addByPrefix('singRIGHT', "right_", 24, false);

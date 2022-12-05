@@ -22,50 +22,48 @@ class Character extends FlxSprite
 	var script = new Hscript();
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
+	{
+		super(x, y);
+
+		animOffsets = new Map<String, Array<Dynamic>>();
+		curCharacter = character;
+		this.isPlayer = isPlayer;
+		antialiasing = true;
+		script.interp.scriptObject = this;
+		try
 		{
-			super(x, y);
-	
-			animOffsets = new Map<String, Array<Dynamic>>();
-			curCharacter = character;
-			this.isPlayer = isPlayer;
-			antialiasing = true;
-			script.interp.scriptObject = this;
-			try {
-				script.loadScript("images/characters/" + curCharacter + "/character");
-				script.call("new");
+			script.loadScript("images/characters/" + curCharacter + "/character");
+		}
+		catch (e)
+		{
+			trace(e.details());
+			curCharacter = "dad";
+			script.loadScript("images/characters/" + "dad" + "/character");
+		}
+		script.call("new");
+		dance();
+		if (isPlayer)
+		{
+			flipX = !flipX;
 
-			}
-			catch(e){
-				trace(e.details());
-				curCharacter = "dad";
-				script.loadScript("images/characters/" + "dad" + "/character");
-				script.call("new");
-			}
-
-			script.call("new");
-			dance();
-			if (isPlayer)
+			// Doesn't flip for BF, since his are already in the right place???
+			if (!curCharacter.startsWith('bf'))
 			{
-				flipX = !flipX;
-	
-				// Doesn't flip for BF, since his are already in the right place???
-				if (!curCharacter.startsWith('bf'))
+				// var animArray
+				var oldRight = animation.getByName('singRIGHT').frames;
+				animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
+				animation.getByName('singLEFT').frames = oldRight;
+
+				// IF THEY HAVE MISS ANIMATIONS??
+				if (animation.getByName('singRIGHTmiss') != null)
 				{
-					// var animArray
-					var oldRight = animation.getByName('singRIGHT').frames;
-					animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
-					animation.getByName('singLEFT').frames = oldRight;
-	
-					// IF THEY HAVE MISS ANIMATIONS??
-					if (animation.getByName('singRIGHTmiss') != null)
-					{
-						var oldMiss = animation.getByName('singRIGHTmiss').frames;
-						animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
-						animation.getByName('singLEFTmiss').frames = oldMiss;
-					}
+					var oldMiss = animation.getByName('singRIGHTmiss').frames;
+					animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
+					animation.getByName('singLEFTmiss').frames = oldMiss;
 				}
 			}
 		}
+	}
 
 	override function update(elapsed:Float)
 	{
