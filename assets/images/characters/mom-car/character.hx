@@ -1,5 +1,6 @@
 function new(){
     frames = Paths.getCharacter("SPARROW",curCharacter);
+    icon = "mom";
     animation.addByPrefix('idle', "Mom Idle", 24, false);
     animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
     animation.addByPrefix('singDOWN', "MOM DOWN POSE", 24, false);

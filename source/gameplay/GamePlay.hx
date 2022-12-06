@@ -35,13 +35,14 @@ class GamePlay extends MusicBeatState
 	public var camfollow:FlxObject = new FlxObject(0, 0, 1, 0);
 	public var curzoom:Float;
 
-	var dadGroup = new FlxTypedSpriteGroup<Character>();
-	var dad:Character;
-	var bfGroup = new FlxTypedSpriteGroup<Boyfriend>();
-	var bf:Boyfriend;
-	var gfGroup = new FlxTypedSpriteGroup<Character>();
-	var gf:Character;
-	var stage:Stage;
+	public var dadGroup = new FlxTypedSpriteGroup<Character>();
+	public var dad:Character;
+	public var bfGroup = new FlxTypedSpriteGroup<Boyfriend>();
+	public var bf:Boyfriend;
+	public var gfGroup = new FlxTypedSpriteGroup<Character>();
+	public var gf:Character;
+	public var stage:Stage;
+
 	var camGame = FlxG.camera;
 	var camHUD:FlxCamera;
 
@@ -90,8 +91,7 @@ class GamePlay extends MusicBeatState
 			if (scripts.endsWith('.hx'))
 				modChart.loadScript('data/${SONG.song.toLowerCase()}/${scripts.split(".hx")[0]}');
 		}
-		for (i in OptionsData.gamePlay)
-			trace(i);
+		trace(FlxG.save.data.gamePlay.get("DownScroll"));
 	}
 
 	var camPos:FlxPoint;
@@ -689,7 +689,7 @@ class GamePlay extends MusicBeatState
 		// Prevent player input if botplay is on
 
 		// HOLDS, check for sustain notes
-		if (holdArray.contains(true) && /*!boyfriend.stunned && */ gennedsong)
+		if (holdArray.contains(true) && gennedsong)
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
@@ -773,7 +773,6 @@ class GamePlay extends MusicBeatState
 						if (pressArray[coolNote.noteData] && !hit[coolNote.noteData])
 						{
 							hit[coolNote.noteData] = true;
-							// scoreTxt.color = FlxColor.WHITE;
 							var noteDiff:Float = -(coolNote.strumTime - Conductor.songPosition);
 							goodNoteHit(coolNote);
 						}
@@ -806,6 +805,7 @@ class GamePlay extends MusicBeatState
 		camfollow.setPosition(camPos.x, camPos.y);
 		modChart.interp.variables.set("curStep", curStep);
 		modChart.call("stepHit", [curStep]);
+		// section shit
 		if (curStep % SONG.notes[cursection].lengthInSteps == 0 && cursection < SONG.notes.length - 1)
 		{
 			cursection++;

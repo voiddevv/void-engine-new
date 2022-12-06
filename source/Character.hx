@@ -16,7 +16,7 @@ class Character extends FlxSprite
 	public var camoffset = [0,0];
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
-
+	public var icon = "dad";
 	public var holdTimer:Float = 0;
 	public var danceSteps = ['idle'];
 	public var curDance = 0;

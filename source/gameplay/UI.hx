@@ -18,7 +18,7 @@ class UI extends FlxSpriteGroup
 	public var dadStrum = new StrumLine();
 	public var healthBarBg:FlxSprite = new FlxSprite(0, FlxG.height * 0.9);
 	public var healthBar:FlxBar;
-	public var dadIcon = new HealthIcon('dad');
+	public var dadIcon = new HealthIcon(GamePlay.instance.dad.icon);
 	public var bfIcon = new HealthIcon('bf', true);
 
 	public function new()

@@ -1,5 +1,6 @@
 function new(){
     frames = Paths.getCharacter("SPARROW",curCharacter);
+    icon = "spooky";
     danceSteps = ["danceLeft","danceRight"];
     animation.addByPrefix('singUP', 'spooky UP NOTE', 24, false);
     animation.addByPrefix('singDOWN', 'spooky DOWN note', 24, false);

@@ -1,5 +1,6 @@
 function new(){
     camoffset = [-100,-100];
+    icon = "bf";
     frames = Paths.getCharacter("SPARROW",curCharacter);
     animation.addByPrefix('idle', 'BF idle dance', 24, false);
     animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);

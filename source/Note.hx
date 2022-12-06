@@ -117,7 +117,7 @@ class Note extends FlxSprite
 		if (isSustainNote && prevNote != null)
 		{
 			noteScore * 0.2;
-
+			alpha = 0.8;
 			x += width / 2;
 			y += 100;
 			switch (noteData)
