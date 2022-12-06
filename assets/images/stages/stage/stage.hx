@@ -1,5 +1,5 @@
 function new(){
-    camzoom = 0.9;
+    camZoom = 0.9;
     curStage = 'stage';
     var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stages/stage/stageback'));
     bg.antialiasing = true;

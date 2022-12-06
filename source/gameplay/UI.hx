@@ -30,9 +30,6 @@ class UI extends FlxSpriteGroup
 		playerStrum.screenCenter(X);
 		add(dadStrum);
 		dadStrum.screenCenter(X);
-		if(GamePlay.downScroll){
-			dadStrum.y = FlxG.height*0.7;
-		}
 		dadStrum.x -= 350;
 		playerStrum.x += 350;
 		healthBarBg.loadGraphic(Paths.image("healthBar"));

@@ -1,5 +1,6 @@
 package gameplay;
 
+import flixel.FlxObject;
 import openfl.Assets;
 import scripting.Hscript;
 import flixel.text.FlxText;
@@ -18,6 +19,7 @@ import Section.SwagSection;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import Song.SwagSong;
 import sys.FileSystem;
+import flixel.math.FlxPoint;
 
 using StringTools;
 
@@ -25,11 +27,13 @@ class GamePlay extends MusicBeatState
 {
 	public static var instance:GamePlay;
 	public static var SONG:SwagSong;
-	public static var downScroll:Bool = false;
 
 	public var UI:UI;
 	public var notes:FlxTypedSpriteGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
+	public var cursection = 0;
+	public var camfollow:FlxObject = new FlxObject(0, 0, 1, 0);
+	public var curzoom:Float;
 
 	var dadGroup = new FlxTypedSpriteGroup<Character>();
 	var dad:Character;
@@ -86,7 +90,11 @@ class GamePlay extends MusicBeatState
 			if (scripts.endsWith('.hx'))
 				modChart.loadScript('data/${SONG.song.toLowerCase()}/${scripts.split(".hx")[0]}');
 		}
+		for (i in OptionsData.gamePlay)
+			trace(i);
 	}
+
+	var camPos:FlxPoint;
 
 	override function create()
 	{
@@ -98,10 +106,13 @@ class GamePlay extends MusicBeatState
 		camHUD.bgColor = 0x0;
 		instance = this;
 		FlxG.cameras.add(camHUD, false);
+		FlxG.camera.follow(camfollow, LOCKON, 0.04);
 		stage = new Stage(SONG.stage);
+		curzoom = stage.camZoom;
 		bf = new Boyfriend(770, 450, SONG.player1);
 		dad = new Character(100, 100, SONG.player2);
 		gf = new Character(400, 130, "gf");
+		camPos = new FlxPoint(dad.getMidpoint().x + dad.camoffset[0], dad.getMidpoint().y + dad.camoffset[1]);
 		add(stage);
 		dadGroup.add(dad);
 		bfGroup.add(bf);
@@ -346,12 +357,12 @@ class GamePlay extends MusicBeatState
 		});
 	}
 
-	function sortByShit(Obj1:Note, Obj2:Note):Int
-		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
-
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		FlxG.camera.zoom = CoolUtil.lerp(FlxG.camera.zoom, curzoom, 0.05);
+		camHUD.zoom = CoolUtil.lerp(FlxG.camera.zoom, 1, 0.05);
+
 		modChart.call("update", [elapsed]);
 		if (health > maxHealth)
 			health = 2;
@@ -398,7 +409,7 @@ class GamePlay extends MusicBeatState
 						daNote.active = true;
 					}
 					daNote.y = (UI.dadStrum.members[daNote.noteData].y
-					 	- (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
+						- (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
 
 					// i am so fucking sorry for this if condition
 					if (daNote.isSustainNote
@@ -539,6 +550,7 @@ class GamePlay extends MusicBeatState
 	}
 
 	public var closestNotes:Array<Note> = [];
+
 	var keys = [false, false, false, false];
 
 	private function handleInput(evt:KeyboardEvent):Void
@@ -781,16 +793,30 @@ class GamePlay extends MusicBeatState
 				bf.dance();
 		}
 	}
-	public function syncAudio() {
-		FlxG.sound.music.time = Conductor.songPosition;
-		voices.time = Conductor.songPosition;
+
+	public function syncAudio()
+	{
+		trace("synced audio");
+		Conductor.songPosition = voices.time = FlxG.sound.music.time;
 	}
-	override function stepHit() {
+
+	override function stepHit()
+	{
 		super.stepHit();
-		trace(Conductor.songPosition - FlxG.sound.music.time);
-		if(Conductor.songPosition - FlxG.sound.music.time > 20||Conductor.songPosition - FlxG.sound.music.time < -20)
-			syncAudio();
+		camfollow.setPosition(camPos.x, camPos.y);
+		modChart.interp.variables.set("curStep", curStep);
+		modChart.call("stepHit", [curStep]);
+		if (curStep % SONG.notes[cursection].lengthInSteps == 0 && cursection < SONG.notes.length - 1)
+		{
+			cursection++;
+			trace(cursection);
+		}
+		if (SONG.notes[cursection].mustHitSection)
+			camPos.set(bf.getMidpoint().x + bf.camoffset[0], bf.getMidpoint().y + bf.camoffset[1]);
+		else
+			camPos.set(dad.getMidpoint().x + dad.camoffset[0], dad.getMidpoint().y + dad.camoffset[1]);
 	}
+
 	override function beatHit()
 	{
 		super.beatHit();
@@ -803,6 +829,13 @@ class GamePlay extends MusicBeatState
 			gf.dance();
 		modChart.interp.variables.set("curBeat", curBeat);
 		modChart.call("beatHit", [curBeat]);
+		if (Conductor.songPosition - FlxG.sound.music.time > 20 || Conductor.songPosition - FlxG.sound.music.time < -20)
+			syncAudio();
+		if (curBeat % 4 == 0)
+		{
+			FlxG.camera.zoom += 0.015;
+			camHUD.zoom += 0.03;
+		}
 	}
 
 	function endSong()

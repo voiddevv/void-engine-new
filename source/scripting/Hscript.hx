@@ -1,5 +1,4 @@
 package scripting;
-
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.system.FlxSound;
@@ -36,6 +35,7 @@ class Hscript
 		interp.variables.set("FlxText",FlxText);
 		interp.variables.set("Paths",Paths);
 		interp.variables.set("CoolUtil",CoolUtil);
+		interp.variables.set("MemUtil",MemUtil);
 	}
 
 	public function call(funcName:String, ?args:Array<Dynamic>):Dynamic

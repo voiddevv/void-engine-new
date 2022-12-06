@@ -1,4 +1,5 @@
 function new(){
+    camoffset = [0,-150];
     frames = Paths.getCharacter("SPARROW",curCharacter);
     animation.addByPrefix('idle', 'Dad idle dance', 24,false);
     animation.addByPrefix('singUP', 'Dad Sing Note UP', 24,false);

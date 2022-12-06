@@ -13,7 +13,7 @@ class Character extends FlxSprite
 	public var canDance:Bool = true;
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
-
+	public var camoffset = [0,0];
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 
