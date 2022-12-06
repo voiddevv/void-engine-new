@@ -117,7 +117,7 @@ class Note extends FlxSprite
 		if (isSustainNote && prevNote != null)
 		{
 			noteScore * 0.2;
-			alpha = 0.8;
+			alpha = 0.6;
 			x += width / 2;
 			y += 100;
 			switch (noteData)
@@ -149,7 +149,7 @@ class Note extends FlxSprite
 						prevNote.animation.play('redhold');
 				}
 
-				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.68 * GamePlay.SONG.speed;
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * GamePlay.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
