@@ -77,7 +77,7 @@ class MusicBeatState extends FlxUIState
 		//do literally nothing dumbass
 	}
 	override function destroy() {
-		MemUtil.clear();
+		MemUtil.clearAll();
 		super.destroy();
 	}
 }

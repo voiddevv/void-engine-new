@@ -91,7 +91,7 @@ class GamePlay extends MusicBeatState
 			if (scripts.endsWith('.hx'))
 				modChart.loadScript('data/${SONG.song.toLowerCase()}/${scripts.split(".hx")[0]}');
 		}
-		trace(FlxG.save.data.gamePlay.get("DownScroll"));
+		// trace(FlxG.save.data.gamePlay.get("DownScroll"));
 	}
 
 	var camPos:FlxPoint;
@@ -361,7 +361,7 @@ class GamePlay extends MusicBeatState
 	{
 		super.update(elapsed);
 		FlxG.camera.zoom = CoolUtil.lerp(FlxG.camera.zoom, curzoom, 0.05);
-		camHUD.zoom = CoolUtil.lerp(FlxG.camera.zoom, 1, 0.05);
+		camHUD.zoom = CoolUtil.lerp(camHUD.zoom, 1, 0.05);
 
 		modChart.call("update", [elapsed]);
 		if (health > maxHealth)
@@ -413,7 +413,7 @@ class GamePlay extends MusicBeatState
 
 					// i am so fucking sorry for this if condition
 					if (daNote.isSustainNote
-						&& daNote.y + daNote.offset.y <= UI.dadStrum.y + 20 + Note.swagWidth / 2
+						&& daNote.y + daNote.offset.y <= UI.dadStrum.y + 25 + Note.swagWidth / 2
 						&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
 					{
 						var swagRect = new FlxRect(0, UI.dadStrum.y + Note.swagWidth / 2 - daNote.y, daNote.width * 2, daNote.height * 2);
@@ -455,7 +455,6 @@ class GamePlay extends MusicBeatState
 
 	function noteMiss(direction:Int = 1):Void
 	{
-		modChart.call("onMiss");
 		misses++;
 		var dirs = ["LEFT", "DOWN", "UP", "RIGHT"];
 		health -= 0.06;
@@ -476,6 +475,7 @@ class GamePlay extends MusicBeatState
 			i.stunned = true;
 			i.playAnim('sing${dirs[direction]}miss', true);
 		}
+		modChart.call("onMiss");
 	}
 
 	function dadNoteHit(note:Note)
@@ -806,12 +806,7 @@ class GamePlay extends MusicBeatState
 		modChart.interp.variables.set("curStep", curStep);
 		modChart.call("stepHit", [curStep]);
 		// section shit
-		if (curStep % SONG.notes[cursection].lengthInSteps == 0 && cursection < SONG.notes.length - 1)
-		{
-			cursection++;
-			trace(cursection);
-		}
-		if (SONG.notes[cursection].mustHitSection)
+		if (SONG.notes[Std.int(curStep / 16)] != null && SONG.notes[Std.int(curStep / 16)].mustHitSection)
 			camPos.set(bf.getMidpoint().x + bf.camoffset[0], bf.getMidpoint().y + bf.camoffset[1]);
 		else
 			camPos.set(dad.getMidpoint().x + dad.camoffset[0], dad.getMidpoint().y + dad.camoffset[1]);
@@ -843,7 +838,7 @@ class GamePlay extends MusicBeatState
 		modChart.call("onEndSong");
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, releaseInput);
-		MemUtil.clear();
+		MemUtil.clearAll();
 		FlxG.switchState(new MainMenuState());
 	}
 }
