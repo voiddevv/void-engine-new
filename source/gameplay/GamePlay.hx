@@ -1,7 +1,6 @@
 package gameplay;
 
 import flixel.FlxObject;
-import openfl.Assets;
 import scripting.Hscript;
 import flixel.text.FlxText;
 import openfl.events.KeyboardEvent;
@@ -14,8 +13,6 @@ import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.util.FlxTimer;
 import flixel.FlxCamera;
-import flixel.util.FlxSort;
-import Section.SwagSection;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import Song.SwagSong;
 import sys.FileSystem;
