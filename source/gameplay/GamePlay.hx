@@ -31,7 +31,6 @@ class GamePlay extends MusicBeatState
 	public var UI:UI;
 	public var notes:FlxTypedSpriteGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
-	public var cursection = 0;
 	public var camfollow:FlxObject = new FlxObject(0, 0, 1, 0);
 	public var curzoom:Float;
 
