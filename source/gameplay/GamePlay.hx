@@ -24,13 +24,15 @@ class GamePlay extends MusicBeatState
 {
 	public static var instance:GamePlay;
 	public static var SONG:SwagSong;
+	public static var storysongs:Array<String> = [];
+	public static var stroySongIndex:Int = 0;
+	public static var storyMode:Bool = false;
 
 	public var UI:UI;
 	public var notes:FlxTypedSpriteGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
 	public var camfollow:FlxObject = new FlxObject(0, 0, 1, 0);
 	public var curzoom:Float;
-
 	public var dadGroup = new FlxTypedSpriteGroup<Character>();
 	public var dad:Character;
 	public var bfGroup = new FlxTypedSpriteGroup<Boyfriend>();
@@ -39,7 +41,7 @@ class GamePlay extends MusicBeatState
 	public var gf:Character;
 	public var stage:Stage;
 
-	var camGame = FlxG.camera;
+	var camGame:FlxCamera = FlxG.camera;
 	var camHUD:FlxCamera;
 
 	public var gennedsong:Bool = false;
@@ -87,7 +89,6 @@ class GamePlay extends MusicBeatState
 			if (scripts.endsWith('.hx'))
 				modChart.loadScript('data/${SONG.song.toLowerCase()}/${scripts.split(".hx")[0]}');
 		}
-		// trace(FlxG.save.data.gamePlay.get("DownScroll"));
 	}
 
 	var camPos:FlxPoint;
@@ -97,34 +98,41 @@ class GamePlay extends MusicBeatState
 		super.create();
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, releaseInput);
-		instance = this;
+		// camera set up
 		camHUD = new FlxCamera();
-		camHUD.bgColor = 0x0;
-		instance = this;
+		camHUD.bgColor = 0;
 		FlxG.cameras.add(camHUD, false);
 		FlxG.camera.follow(camfollow, LOCKON, 0.04);
+		// stage shit
 		stage = new Stage(SONG.stage);
 		curzoom = stage.camZoom;
+		// character shit
 		bf = new Boyfriend(770, 450, SONG.player1);
 		dad = new Character(100, 100, SONG.player2);
 		gf = new Character(400, 130, "gf");
 		camPos = new FlxPoint(dad.getMidpoint().x + dad.camoffset[0], dad.getMidpoint().y + dad.camoffset[1]);
-		add(stage);
+		//ui
+		UI = new UI();
+		UI.cameras = [camHUD];
+		modChart.call("create");
+		// adding shit
 		dadGroup.add(dad);
 		bfGroup.add(bf);
 		gfGroup.add(gf);
-		modChart.call("create");
+		add(stage);
 		add(gfGroup);
 		add(bfGroup);
 		add(dadGroup);
-		UI = new UI();
 		add(UI);
-		UI.cameras = [camHUD];
-		modChart.call("createPost");
 		notes = new FlxTypedSpriteGroup<Note>();
 		notes.cameras = [camHUD];
 		add(notes);
+		if (storyMode)
+		{
+			SONG.song = storysongs[stroySongIndex];
+		}
 		ChartParser.parse(SONG.song, 'hard');
+		modChart.call("createPost");
 		startCountdown();
 	}
 
@@ -832,6 +840,11 @@ class GamePlay extends MusicBeatState
 	function endSong()
 	{
 		modChart.call("onEndSong");
+		if (storyMode)
+		{
+			stroySongIndex++;
+			FlxG.resetState();
+		}
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, releaseInput);
 		MemUtil.clearAll();
