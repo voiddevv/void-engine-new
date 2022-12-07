@@ -5,3 +5,4 @@ ok with that out of the way welcome to the void engine github page any bug can b
 # BUILDING
 If you are trying to build use the setup file in the setup folder .sh is for linux and mac while the .bat is  for windows
 # THATS IT FOR NOW
+[![botfriend](https://cdn.discordapp.com/attachments/948680364996579329/1050130826853109830/BOYFRIEND_2.png "botfriend")](https://cdn.discordapp.com/attachments/948680364996579329/1050130826853109830/BOYFRIEND_2.png "botfriend")
