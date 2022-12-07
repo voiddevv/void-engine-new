@@ -124,6 +124,7 @@ class GamePlay extends MusicBeatState
 		add(bfGroup);
 		add(dadGroup);
 		add(UI);
+		// yes leather i know this is base game
 		notes = new FlxTypedSpriteGroup<Note>();
 		notes.cameras = [camHUD];
 		add(notes);
@@ -221,7 +222,6 @@ class GamePlay extends MusicBeatState
 			}
 
 			swagCounter += 1;
-			// generateSong('fresh');
 		}, 5);
 	}
 
