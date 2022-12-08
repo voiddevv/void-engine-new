@@ -28,7 +28,13 @@
             "song":"triple-trouble",
             "icon":"bf",
             "bpm":100,
-            "diffs":["easy","normal","hard"]
+            "diffs":["hard"]
+        },
+                {
+            "song":"foolhardy",
+            "icon":"dad",
+            "bpm":100,
+            "diffs":["hard"]
         }
     ]
 }

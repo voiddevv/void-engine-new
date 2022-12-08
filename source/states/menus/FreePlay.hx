@@ -56,11 +56,10 @@ class FreePlay extends MusicBeatState
 		}
 		add(songGroup);
 		add(iconGroup);
-		add(new FlxSprite().makeGraphic(300, 15, 0x00000000));
+		add(new FlxSprite(800).makeGraphic(500, 150, 0x8B000000));
 		diffText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
 		add(diffText);
 		changeSong(0);
-		changeDiff(0);
 	}
 
 	function changeDiff(a:Int)
@@ -72,17 +71,20 @@ class FreePlay extends MusicBeatState
 			curdiff = diffs.length - 1;
 		diffText.text = diffs[curdiff];
 		GamePlay.chartDiff = diffs[curdiff];
+        trace(diffs[curdiff]);
 	}
 
 	function sexSong()
 	{
 		FlxG.sound.music.stop();
+        GamePlay.SONG = Song.loadFromJson(diffs[curdiff], songs[cursong]);
 		FlxG.switchState(new GamePlay());
 	}
 
 	function changeSong(a:Int)
 	{
 		FlxG.sound.play(Paths.sound("scrollMenu"));
+        changeDiff(0);
 		cursong += a;
 		if (cursong > songs.length - 1)
 			cursong = 0;
@@ -94,7 +96,6 @@ class FreePlay extends MusicBeatState
 		var musicthr = sys.thread.Thread.create(function()
 		{
 			FlxG.sound.playMusic(Paths.inst(songs[cursong]));
-            GamePlay.SONG = Song.loadFromJson(diffs[curdiff], songs[cursong]);
 		});
 	}
 

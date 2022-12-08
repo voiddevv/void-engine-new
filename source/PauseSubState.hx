@@ -1,5 +1,6 @@
 package;
 
+import openfl.events.KeyboardEvent;
 import gameplay.GamePlay;
 import Controls.Control;
 import flixel.FlxG;
@@ -88,6 +89,8 @@ class PauseSubState extends MusicBeatSubstate
 					close();
 				case "Restart Song":
 					FlxG.resetState();
+					FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, GamePlay.instance.handleInput);
+					FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, GamePlay.instance.releaseInput);
 				case "Exit to menu":
 					GamePlay.instance.endSong();
 			}

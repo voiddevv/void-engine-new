@@ -581,7 +581,7 @@ class GamePlay extends MusicBeatState
 
 	var keys = [false, false, false, false];
 
-	private function handleInput(evt:KeyboardEvent):Void
+	public function handleInput(evt:KeyboardEvent):Void
 	{
 		if (paused)
 			return;
@@ -665,7 +665,7 @@ class GamePlay extends MusicBeatState
 		}
 	}
 
-	private function releaseInput(evt:KeyboardEvent):Void // handles releases
+	public function releaseInput(evt:KeyboardEvent):Void // handles releases
 	{
 		@:privateAccess
 		var key = FlxKey.toStringMap.get(evt.keyCode);
