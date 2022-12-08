@@ -1,5 +1,6 @@
 package gameplay;
 
+import flixel.FlxSubState;
 import sys.thread.Thread;
 import flixel.FlxObject;
 import scripting.Hscript;
@@ -31,7 +32,6 @@ class GamePlay extends MusicBeatState
 	public static var paused:Bool = false;
 	public static var canPause:Bool = true;
 	public static var chartDiff:String = "normal";
-
 	public var UI:UI;
 	public var notes:FlxTypedSpriteGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
@@ -85,7 +85,7 @@ class GamePlay extends MusicBeatState
 		return totalHit / (totalNotes + misses);
 	}
 
-	var voices = new FlxSound().loadEmbedded(Paths.voices(SONG.song));
+	public var voices = new FlxSound().loadEmbedded(Paths.voices(SONG.song));
 
 	public function new()
 	{
@@ -377,7 +377,10 @@ class GamePlay extends MusicBeatState
 			startDelay: Conductor.crochet * 0.001
 		});
 	}
-
+	override function openSubState(SubState:FlxSubState) {
+		super.openSubState(SubState);
+		FlxG.state.persistentUpdate = false;
+	}
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -471,6 +474,14 @@ class GamePlay extends MusicBeatState
 				if (gennedsong)
 					keyShit();
 			}
+		}
+		if(gennedsong && FlxG.keys.justPressed.ENTER){
+			openSubState(new PauseSubState(0,0));
+			for(i in FlxG.sound.list)
+				i.pause();
+			FlxG.sound.music.pause();
+			paused = true;
+
 		}
 	}
 
@@ -854,7 +865,7 @@ class GamePlay extends MusicBeatState
 		}
 	}
 
-	function endSong()
+	public function endSong()
 	{
 		modChart.call("onEndSong");
 		if (storyMode)
@@ -865,6 +876,7 @@ class GamePlay extends MusicBeatState
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, releaseInput);
 		MemUtil.clearAll();
+		paused = false;
 		FlxG.switchState(new MainMenuState());
 	}
 }

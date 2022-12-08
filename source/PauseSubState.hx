@@ -1,5 +1,6 @@
 package;
 
+import gameplay.GamePlay;
 import Controls.Control;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -49,6 +50,13 @@ class PauseSubState extends MusicBeatSubstate
 
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
+	override function close() {
+		super.close();
+		GamePlay.paused = false;
+		GamePlay.instance.voices.resume();
+		FlxG.sound.music.resume();
+		GamePlay.instance.syncAudio();
+	}
 
 	override function update(elapsed:Float)
 	{
@@ -81,7 +89,7 @@ class PauseSubState extends MusicBeatSubstate
 				case "Restart Song":
 					FlxG.resetState();
 				case "Exit to menu":
-					FlxG.switchState(new MainMenuState());
+					GamePlay.instance.endSong();
 			}
 		}
 

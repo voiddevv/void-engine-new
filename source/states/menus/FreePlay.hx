@@ -77,7 +77,6 @@ class FreePlay extends MusicBeatState
 	function sexSong()
 	{
 		FlxG.sound.music.stop();
-		GamePlay.SONG = Song.loadFromJson(diffs[curdiff], songs[cursong]);
 		FlxG.switchState(new GamePlay());
 	}
 
@@ -95,6 +94,7 @@ class FreePlay extends MusicBeatState
 		var musicthr = sys.thread.Thread.create(function()
 		{
 			FlxG.sound.playMusic(Paths.inst(songs[cursong]));
+            GamePlay.SONG = Song.loadFromJson(diffs[curdiff], songs[cursong]);
 		});
 	}
 
