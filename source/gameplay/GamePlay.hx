@@ -1,5 +1,6 @@
 package gameplay;
 
+import sys.thread.Thread;
 import flixel.FlxObject;
 import scripting.Hscript;
 import flixel.text.FlxText;
@@ -27,6 +28,9 @@ class GamePlay extends MusicBeatState
 	public static var storysongs:Array<String> = [];
 	public static var stroySongIndex:Int = 0;
 	public static var storyMode:Bool = false;
+	public static var paused:Bool = false;
+	public static var canPause:Bool = true;
+	public static var chartDiff:String = "normal";
 
 	public var UI:UI;
 	public var notes:FlxTypedSpriteGroup<Note>;
@@ -41,12 +45,15 @@ class GamePlay extends MusicBeatState
 	public var gf:Character;
 	public var stage:Stage;
 
+	// cameras var
 	var camGame:FlxCamera = FlxG.camera;
 	var camHUD:FlxCamera;
 
 	public var gennedsong:Bool = false;
 
 	var modChart = new Hscript();
+
+	public var camPos:FlxPoint;
 
 	public var combo:Int = 0;
 	public var health = 1.0;
@@ -91,8 +98,6 @@ class GamePlay extends MusicBeatState
 		}
 	}
 
-	var camPos:FlxPoint;
-
 	override function create()
 	{
 		super.create();
@@ -110,10 +115,8 @@ class GamePlay extends MusicBeatState
 		bf = new Boyfriend(770, 450, SONG.player1);
 		dad = new Character(100, 100, SONG.player2);
 		gf = new Character(400, 130, "gf");
-		camPos = new FlxPoint(dad.getMidpoint().x + dad.camoffset[0], dad.getMidpoint().y + dad.camoffset[1]);
-		//ui
+		// ui
 		UI = new UI();
-		UI.cameras = [camHUD];
 		modChart.call("create");
 		// adding shit
 		dadGroup.add(dad);
@@ -124,15 +127,19 @@ class GamePlay extends MusicBeatState
 		add(bfGroup);
 		add(dadGroup);
 		add(UI);
+		// camera set up 2
+		camPos = new FlxPoint(gf.getMidpoint().x, gf.getMidpoint().y);
+		camfollow.setPosition(camPos.x, camPos.y);
 		// yes leather i know this is base game
 		notes = new FlxTypedSpriteGroup<Note>();
 		notes.cameras = [camHUD];
+		UI.cameras = [camHUD];
 		add(notes);
 		if (storyMode)
 		{
 			SONG.song = storysongs[stroySongIndex];
 		}
-		ChartParser.parse(SONG.song, 'hard');
+		ChartParser.parse(chartDiff);
 		modChart.call("createPost");
 		startCountdown();
 	}
@@ -217,7 +224,10 @@ class GamePlay extends MusicBeatState
 					});
 					FlxG.sound.play('assets/sounds/introGo' + altSuffix + TitleState.soundExt, 0.6);
 				case 4:
-					startMusic();
+					Thread.create(function()
+					{
+						startMusic();
+					});
 					gennedsong = true;
 			}
 
@@ -256,11 +266,13 @@ class GamePlay extends MusicBeatState
 			daRating = 'shit';
 			score = 50;
 			ballin = 0.0;
+			health -= 0.2;
 		}
 		else if (noteDiff >= 90)
 		{
 			daRating = 'bad';
 			score = 100;
+
 			ballin = 0.4;
 		}
 		else if (noteDiff >= 45)
@@ -268,6 +280,11 @@ class GamePlay extends MusicBeatState
 			daRating = 'good';
 			score = 200;
 			ballin = 0.7;
+			health += 0.024;
+		}
+		else
+		{
+			health += 0.05;
 		}
 		totalHit += ballin;
 
@@ -461,7 +478,7 @@ class GamePlay extends MusicBeatState
 	{
 		misses++;
 		var dirs = ["LEFT", "DOWN", "UP", "RIGHT"];
-		health -= 0.06;
+		health -= 0.1;
 		if (combo > 5 && gf.animOffsets.exists('sad'))
 		{
 			gf.playAnim('sad');
@@ -529,10 +546,6 @@ class GamePlay extends MusicBeatState
 				combo += 1;
 			}
 			var dirs = ["LEFT", "DOWN", "UP", "RIGHT"];
-			if (note.noteData >= 0)
-				health += 0.023;
-			else
-				health += 0.004;
 			for (i in bfGroup.members)
 				i.playAnim('sing${dirs[note.noteData]}', true);
 
@@ -559,6 +572,8 @@ class GamePlay extends MusicBeatState
 
 	private function handleInput(evt:KeyboardEvent):Void
 	{
+		if (paused)
+			return;
 		@:privateAccess
 		var key = FlxKey.toStringMap.get(evt.keyCode);
 
@@ -669,6 +684,8 @@ class GamePlay extends MusicBeatState
 
 	private function keyShit():Void // I've invested in emma stocks
 	{
+		if (paused)
+			return;
 		// control arrays, order L D R U
 		var holdArray:Array<Bool> = [
 			FlxG.keys.pressed.D,

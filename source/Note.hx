@@ -164,7 +164,7 @@ class Note extends FlxSprite
 		{
 			// The * 0.5 us so that its easier to hit them too late, instead of too early
 			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset))
+				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset) * 1.35)
 			{
 				canBeHit = true;
 			}
@@ -189,5 +189,6 @@ class Note extends FlxSprite
 			if (alpha > 0.3)
 				alpha = 0.3;
 		}
+		
 	}
 }

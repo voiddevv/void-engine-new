@@ -6,8 +6,8 @@ import Section.SwagSection;
 import haxe.Json;
 import flixel.util.FlxSort;
 class ChartParser {
-    public static function parse(data:String,diff:String = "") {
-        var songData:SwagSong = Json.parse(Assets.getText(Paths.json('data/${data.toLowerCase()}/${data.toLowerCase()}-$diff'))).song;
+    public static function parse(diff:String = "") {
+        var songData:SwagSong = Json.parse(Assets.getText(Paths.json('data/${GamePlay.SONG.song.toLowerCase()}/$diff'))).song;
 		Conductor.changeBPM(songData.bpm);
 
 		var noteData:Array<SwagSection>;

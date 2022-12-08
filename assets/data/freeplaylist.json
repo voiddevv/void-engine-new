@@ -1,5 +1,34 @@
 {
     "songs":[
-        
+        {
+            "song":"tutorial",
+            "icon":"gf",
+            "bpm":100,
+            "diffs":["easy","normal","hard"]
+        },
+        {
+            "song":"bopeebo",
+            "icon":"dad",
+            "bpm":100,
+            "diffs":["easy","normal","hard"]
+        },
+        {
+            "song":"fresh",
+            "icon":"dad",
+            "bpm":100,
+            "diffs":["easy","normal","hard"]
+        },
+        {
+            "song":"dadbattle",
+            "icon":"dad",
+            "bpm":100,
+            "diffs":["easy","normal","hard"]
+        },
+        {
+            "song":"triple-trouble",
+            "icon":"bf",
+            "bpm":100,
+            "diffs":["easy","normal","hard"]
+        }
     ]
 }
