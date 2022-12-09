@@ -20,7 +20,7 @@ typedef SongData =
 	var icon:String;
 	var bpm:Float;
 	var diffs:Array<String>;
-    var color:String;
+	var color:String;
 }
 
 class FreePlay extends MusicBeatState
@@ -53,12 +53,17 @@ class FreePlay extends MusicBeatState
 			songText.targetY = i;
 			songGroup.add(songText);
 			var icon = new HealthIcon(icons[i]);
-            icon.sprTracker = songText;
+			icon.sprTracker = songText;
 			iconGroup.add(icon);
 		}
 		add(songGroup);
 		add(iconGroup);
-		add(new FlxSprite(800).makeGraphic(500, 150, 0x8B000000));
+        var scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+		diffText.setPosition(scoreText.x, scoreText.y + 32);
+		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 8, 0).makeGraphic(Std.int(FlxG.width * 0.35), Std.int(66*1.2), 0xFF000000);
+		scoreBG.alpha = 0.6;
+		add(scoreBG);
+		scoreText.setFormat("assets/fonts/vcr.ttf", 32, FlxColor.WHITE, RIGHT);
 		diffText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
 		add(diffText);
 		changeSong(0);
@@ -78,7 +83,7 @@ class FreePlay extends MusicBeatState
 
 	function sexSong()
 	{
-        GamePlay.SONG = Song.loadFromJson(diffs[curdiff], songs[cursong]);
+		GamePlay.SONG = Song.loadFromJson(diffs[curdiff], songs[cursong]);
 		FlxG.sound.music.stop();
 		FlxG.switchState(new GamePlay());
 	}
@@ -95,7 +100,7 @@ class FreePlay extends MusicBeatState
 		trace(cursong);
 		diffs = freeplayJson.songs[cursong].diffs;
 		trace(diffs);
-        FlxTween.color(bg,0.45,bg.color,FlxColor.fromString(freeplayJson.songs[cursong].color));
+		FlxTween.color(bg, 0.45, bg.color, FlxColor.fromString(freeplayJson.songs[cursong].color));
 		var musicthr = sys.thread.Thread.create(function()
 		{
 			FlxG.sound.playMusic(Paths.inst(songs[cursong].toLowerCase()));
@@ -121,10 +126,11 @@ class FreePlay extends MusicBeatState
 			{
 				sexSong();
 			}
-            catch(e){
-                trace("SONG CHART NOT FOUND ERROR BELOW");
-                trace(e.details());
-            }
+			catch (e)
+			{
+				trace("SONG CHART NOT FOUND ERROR BELOW");
+				trace(e.details());
+			}
 		}
 	}
 }

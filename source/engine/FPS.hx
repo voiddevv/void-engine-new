@@ -1,5 +1,8 @@
 package engine;
 
+import lime.net.oauth.OAuthVersion;
+import haxe.display.Protocol.Version;
+import lime.app.Application;
 import haxe.Timer;
 import openfl.display.FPS;
 import openfl.events.Event;
@@ -20,6 +23,8 @@ class FPS extends TextField
 	private var times:Array<Float>;
 
 	private var memPeak:Float = 0;
+
+    var enginever = Application.current.meta.get('version');
 
 	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0x000000)
 	{
@@ -58,7 +63,7 @@ class FPS extends TextField
 
 		if (visible)
 		{
-			text = "FPS: " + times.length + "\nMEM: " + mem + " MB\nMEM peak: " + memPeak + " MB";
+			text = "FPS: " + times.length + "\nMEM: " + mem + " MB\nMEM peak: " + memPeak + " MB\n" + "Void Engine Pre-Alpha " + enginever ;
 		}
 	}
 }

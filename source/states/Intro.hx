@@ -8,6 +8,7 @@ class Intro extends MusicBeatState {
             FlxG.save.flush();
             trace("save data was null");
         }
+        FlxG.sound.volume = FlxG.save.data.volume;
 
         FlxG.switchState(new TitleState());
     }

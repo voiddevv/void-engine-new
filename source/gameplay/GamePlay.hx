@@ -1,5 +1,6 @@
 package gameplay;
 
+import flixel.util.FlxColor;
 import haxe.io.Path;
 import flixel.FlxSubState;
 import sys.thread.Thread;
@@ -50,6 +51,7 @@ class GamePlay extends MusicBeatState
 	// cameras var
 	var camGame:FlxCamera = FlxG.camera;
 	var camHUD:FlxCamera;
+	var camOther:FlxCamera;
 
 	public var gennedsong:Bool = false;
 
@@ -108,8 +110,11 @@ class GamePlay extends MusicBeatState
 		FlxG.sound.playMusic(Paths.inst(SONG.song),0);
 		// camera set up
 		camHUD = new FlxCamera();
+		camOther = new FlxCamera();
 		camHUD.bgColor = 0;
+		camOther.bgColor = 0;
 		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camOther,false);
 		FlxG.camera.follow(camfollow, LOCKON, 0.04);
 		// stage shit
 		stage = new Stage(SONG.stage);
@@ -143,6 +148,7 @@ class GamePlay extends MusicBeatState
 			SONG.song = storysongs[stroySongIndex];
 		}
 		ChartParser.parse(chartDiff);
+		camHUD.pixelPerfectRender = true;
 		modChart.call("createPost");
 		startCountdown();
 	}

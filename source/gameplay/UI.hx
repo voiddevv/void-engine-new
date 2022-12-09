@@ -24,7 +24,7 @@ class UI extends FlxSpriteGroup
 	public function new()
 	{
 		super();
-		scoretext = new FlxText(0,0,0,'Score: ${GamePlay.instance.songscore} | Misses: ${GamePlay.instance.misses} | Accuracy: ${GamePlay.instance.accuracy * 100} | Rank: ${GamePlay.instance.rank}',16);
+		scoretext = new FlxText(0,0,0,'Score: ${GamePlay.instance.songscore} | Misses: ${GamePlay.instance.misses} | Accuracy: ${GamePlay.instance.accuracy * 100}% | Rank: ${GamePlay.instance.rank}',16);
 		instance = this;
 		add(playerStrum);
 		playerStrum.screenCenter(X);
