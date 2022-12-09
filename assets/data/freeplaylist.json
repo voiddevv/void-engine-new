@@ -4,37 +4,44 @@
             "song":"tutorial",
             "icon":"gf",
             "bpm":100,
-            "diffs":["easy","normal","hard"]
+            "diffs":["easy","normal","hard"],
+            "color": "0xa5004d"
         },
         {
             "song":"bopeebo",
             "icon":"dad",
             "bpm":100,
-            "diffs":["easy","normal","hard"]
+            "diffs":["easy","normal","hard"],
+            "color": "0xaf66ce"
+
         },
         {
             "song":"fresh",
             "icon":"dad",
             "bpm":100,
-            "diffs":["easy","normal","hard"]
+            "diffs":["easy","normal","hard"],
+            "color": "0xaf66ce"
         },
         {
             "song":"dadbattle",
             "icon":"dad",
             "bpm":100,
-            "diffs":["easy","normal","hard"]
+            "diffs":["easy","normal","hard"],
+            "color": "0xaf66ce"
         },
         {
             "song":"triple-trouble",
             "icon":"bf",
             "bpm":100,
-            "diffs":["hard"]
+            "diffs":["hard"],
+            "color": "0xa5004d"
         },
                 {
             "song":"foolhardy",
             "icon":"dad",
             "bpm":100,
-            "diffs":["hard","cum"]
+            "diffs":["hard","cum"],
+            "color": "0xa5004d"
         }
     ]
 }

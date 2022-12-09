@@ -1,5 +1,6 @@
 package states.menus;
 
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import gameplay.GamePlay;
@@ -19,6 +20,7 @@ typedef SongData =
 	var icon:String;
 	var bpm:Float;
 	var diffs:Array<String>;
+    var color:String;
 }
 
 class FreePlay extends MusicBeatState
@@ -93,6 +95,7 @@ class FreePlay extends MusicBeatState
 		trace(cursong);
 		diffs = freeplayJson.songs[cursong].diffs;
 		trace(diffs);
+        FlxTween.color(bg,0.45,bg.color,FlxColor.fromString(freeplayJson.songs[cursong].color));
 		var musicthr = sys.thread.Thread.create(function()
 		{
 			FlxG.sound.playMusic(Paths.inst(songs[cursong].toLowerCase()));
