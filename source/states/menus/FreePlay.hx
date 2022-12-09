@@ -71,20 +71,20 @@ class FreePlay extends MusicBeatState
 			curdiff = diffs.length - 1;
 		diffText.text = diffs[curdiff];
 		GamePlay.chartDiff = diffs[curdiff];
-        trace(diffs[curdiff]);
+		trace(diffs[curdiff]);
 	}
 
 	function sexSong()
 	{
-		FlxG.sound.music.stop();
         GamePlay.SONG = Song.loadFromJson(diffs[curdiff], songs[cursong]);
+		FlxG.sound.music.stop();
 		FlxG.switchState(new GamePlay());
 	}
 
 	function changeSong(a:Int)
 	{
 		FlxG.sound.play(Paths.sound("scrollMenu"));
-        changeDiff(0);
+		changeDiff(0);
 		cursong += a;
 		if (cursong > songs.length - 1)
 			cursong = 0;
@@ -95,7 +95,7 @@ class FreePlay extends MusicBeatState
 		trace(diffs);
 		var musicthr = sys.thread.Thread.create(function()
 		{
-			FlxG.sound.playMusic(Paths.inst(songs[cursong]));
+			FlxG.sound.playMusic(Paths.inst(songs[cursong].toLowerCase()));
 		});
 	}
 
@@ -107,7 +107,7 @@ class FreePlay extends MusicBeatState
 			songGroup.members[i].targetY = i - cursong;
 			iconGroup.members[i].y = songGroup.members[i].y - 50;
 			iconGroup.members[i].x = songGroup.members[i].width;
-            iconGroup.members[i].offset.x = -100;
+			iconGroup.members[i].offset.x = -100;
 		}
 		if (FlxG.keys.justPressed.LEFT)
 			changeDiff(-1);
@@ -118,6 +118,15 @@ class FreePlay extends MusicBeatState
 		if (FlxG.keys.justPressed.UP)
 			changeSong(-1);
 		if (FlxG.keys.justPressed.ENTER)
-			sexSong();
+		{
+			try
+			{
+				sexSong();
+			}
+            catch(e){
+                trace("SONG CHART NOT FOUND ERROR BELOW");
+                trace(e.details());
+            }
+		}
 	}
 }

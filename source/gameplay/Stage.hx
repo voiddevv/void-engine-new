@@ -10,11 +10,11 @@ class Stage extends FlxSpriteGroup {
         super();
         script.interp.scriptObject = this;
         try{
-            script.loadScript('images/stages/$stage/stage');
+            script.loadScript('stages/$stage');
         }
         catch(e){
             trace(e.details());
-            script.loadScript('images/stages/stage/stage');
+            script.loadScript('stages/stage');
         }
         script.call("new");
     }
