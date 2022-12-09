@@ -28,6 +28,7 @@ jobs:
           haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved
           haxelib install lime
           haxelib run lime setup
+          haxelib run lime build windows
           
       - uses: actions/upload-artifact@v2
         with:
