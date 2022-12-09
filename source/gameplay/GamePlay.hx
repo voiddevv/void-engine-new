@@ -1,5 +1,6 @@
 package gameplay;
 
+import haxe.io.Path;
 import flixel.FlxSubState;
 import sys.thread.Thread;
 import flixel.FlxObject;
@@ -32,6 +33,7 @@ class GamePlay extends MusicBeatState
 	public static var paused:Bool = false;
 	public static var canPause:Bool = true;
 	public static var chartDiff:String = "normal";
+
 	public var UI:UI;
 	public var notes:FlxTypedSpriteGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
@@ -103,6 +105,7 @@ class GamePlay extends MusicBeatState
 		super.create();
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, releaseInput);
+		FlxG.sound.playMusic(Paths.inst(SONG.song),0);
 		// camera set up
 		camHUD = new FlxCamera();
 		camHUD.bgColor = 0;
@@ -224,10 +227,7 @@ class GamePlay extends MusicBeatState
 					});
 					FlxG.sound.play('assets/sounds/introGo' + altSuffix + TitleState.soundExt, 0.6);
 				case 4:
-					Thread.create(function()
-					{
-						startMusic();
-					});
+					startMusic();
 					gennedsong = true;
 			}
 
@@ -377,10 +377,13 @@ class GamePlay extends MusicBeatState
 			startDelay: Conductor.crochet * 0.001
 		});
 	}
-	override function openSubState(SubState:FlxSubState) {
+
+	override function openSubState(SubState:FlxSubState)
+	{
 		super.openSubState(SubState);
 		FlxG.state.persistentUpdate = false;
 	}
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -475,13 +478,13 @@ class GamePlay extends MusicBeatState
 					keyShit();
 			}
 		}
-		if(gennedsong && FlxG.keys.justPressed.ENTER){
-			openSubState(new PauseSubState(0,0));
-			for(i in FlxG.sound.list)
+		if (gennedsong && FlxG.keys.justPressed.ENTER)
+		{
+			openSubState(new PauseSubState(0, 0));
+			for (i in FlxG.sound.list)
 				i.pause();
 			FlxG.sound.music.pause();
 			paused = true;
-
 		}
 	}
 
