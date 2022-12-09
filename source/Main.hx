@@ -1,7 +1,7 @@
 package;
 
+import engine.FPS;
 import flixel.FlxGame;
-import openfl.display.FPS;
 import openfl.display.Sprite;
 
 class Main extends Sprite
@@ -11,9 +11,6 @@ class Main extends Sprite
 		super();
 		addChild(new FlxGame(0, 0, Intro,1000,1000,true));
 		FlxG.fixedTimestep = false;
-
-		#if !mobile
-		addChild(new FPS(10, 3, 0xFFFFFF));
-		#end
+		addChild(new FPS(10, 3,0xffffff));
 	}
 }

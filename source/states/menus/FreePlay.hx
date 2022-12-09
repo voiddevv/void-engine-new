@@ -4,7 +4,6 @@ import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import gameplay.GamePlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.group.FlxSpriteGroup;
 import openfl.Assets;
 import haxe.Json;
 import flixel.FlxSprite;
@@ -52,6 +51,7 @@ class FreePlay extends MusicBeatState
 			songText.targetY = i;
 			songGroup.add(songText);
 			var icon = new HealthIcon(icons[i]);
+            icon.sprTracker = songText;
 			iconGroup.add(icon);
 		}
 		add(songGroup);
@@ -103,12 +103,7 @@ class FreePlay extends MusicBeatState
 	{
 		super.update(elapsed);
 		for (i in 0...songGroup.members.length)
-		{
 			songGroup.members[i].targetY = i - cursong;
-			iconGroup.members[i].y = songGroup.members[i].y - 50;
-			iconGroup.members[i].x = songGroup.members[i].width;
-			iconGroup.members[i].offset.x = -100;
-		}
 		if (FlxG.keys.justPressed.LEFT)
 			changeDiff(-1);
 		if (FlxG.keys.justPressed.RIGHT)
