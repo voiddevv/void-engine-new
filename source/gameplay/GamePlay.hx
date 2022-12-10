@@ -853,6 +853,8 @@ class GamePlay extends MusicBeatState
 	{
 		super.stepHit();
 		camfollow.setPosition(camPos.x, camPos.y);
+		stage.script.interp.variables.set("curStep", curStep);
+		stage.script.call("stepHit", [curStep]);
 		modChart.interp.variables.set("curStep", curStep);
 		modChart.call("stepHit", [curStep]);
 		// section shit
@@ -872,6 +874,8 @@ class GamePlay extends MusicBeatState
 			dad.dance();
 		if (!gf.animation.name.startsWith("sing"))
 			gf.dance();
+		stage.script.interp.variables.set("curBeat", curBeat);
+		stage.script.call("beatHit", [curBeat]);
 		modChart.interp.variables.set("curBeat", curBeat);
 		modChart.call("beatHit", [curBeat]);
 		if (Conductor.songPosition - FlxG.sound.music.time > 20 || Conductor.songPosition - FlxG.sound.music.time < -20)
@@ -892,7 +896,7 @@ class GamePlay extends MusicBeatState
 			FlxG.resetState();
 		}
 		paused = false;
-		FlxG.switchState(new MainMenuState());
+		FlxG.switchState(new MainMenu());
 	}
 
 	override function destroy()

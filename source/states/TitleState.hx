@@ -256,7 +256,7 @@ class TitleState extends MusicBeatState
 			{
 				// Check if version is outdated
 
-				FlxG.switchState(new MainMenuState());
+				FlxG.switchState(new MainMenu());
 			});
 			// FlxG.sound.play('assets/music/titleShoot' + TitleState.soundExt, 0.7);
 		}
