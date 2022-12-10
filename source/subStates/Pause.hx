@@ -11,14 +11,15 @@ class Pause extends MusicBeatSubstate
 	var options:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
 	var curOption:Int = 0;
 	var optionsGroup = new FlxTypedGroup<Alphabet>();
-    var menuMusic:FlxSound;
+	var menuMusic:FlxSound;
 
-	public function new()
+	override function create()
 	{
-		super();
-        menuMusic = new FlxSound().loadEmbedded(Paths.music("breakfast"),true);
-        FlxG.sound.list.add(menuMusic);
-        menuMusic.play();
+		super.create();
+        menuMusic = new FlxSound().loadEmbedded(Paths.music("breakfast"), true);
+        menuMusic.volume = 0;
+        menuMusic.fadeIn();
+		menuMusic.play(true);
 		var bg = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0.6;
 		add(bg);
@@ -37,7 +38,7 @@ class Pause extends MusicBeatSubstate
 	override function close()
 	{
 		super.close();
-        menuMusic.stop();
+		menuMusic.stop();
 		GamePlay.paused = false;
 		GamePlay.instance.voices.resume();
 		FlxG.sound.music.play();
@@ -46,6 +47,7 @@ class Pause extends MusicBeatSubstate
 
 	function changeItem(a:Int = 0)
 	{
+        FlxG.sound.play(Paths.sound("scrollMenu"));
 		curOption += a;
 		if (curOption > options.length - 1)
 			curOption = 0;
