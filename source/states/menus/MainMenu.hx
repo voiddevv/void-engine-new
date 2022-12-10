@@ -13,6 +13,7 @@ class MainMenu extends MusicBeatState
 	var options:Array<String> = ["story mode", "freeplay", "options"];
 	var optionsGroup = new FlxTypedSpriteGroup<FlxSprite>();
 	var curItem:Int = 0;
+    var issex:Bool = false;
 
 	override function create()
 	{
@@ -58,6 +59,8 @@ class MainMenu extends MusicBeatState
 
 	function changeItem(a:Int = 0)
 	{
+        if(issex)
+            return;
 		FlxG.sound.play(Paths.sound("scrollMenu"));
 		curItem += a;
 		trace(curItem);
@@ -68,11 +71,12 @@ class MainMenu extends MusicBeatState
 		for (i in optionsGroup.members)
 			i.animation.play("idle");
 		optionsGroup.members[curItem].animation.play("selected", true);
-		trace(optionsGroup.members[curItem].ID - 184);
 	}
 
 	function sex()
 	{
+        if(issex)
+            return;
 		FlxG.sound.play('assets/sounds/confirmMenu' + TitleState.soundExt);
 		FlxFlicker.flicker(bg2, 1.1, 0.15, false);
 		optionsGroup.forEach(function(spr:FlxSprite)
@@ -99,10 +103,11 @@ class MainMenu extends MusicBeatState
 						case 'freeplay':
 							FlxG.switchState(new FreePlay());
 						case 'options':
-							FlxG.switchState(new OptionsMenu());
+							FlxG.switchState(new Options());
 					}
 				});
 			}
+            issex = true;
 		});
 	}
 }
