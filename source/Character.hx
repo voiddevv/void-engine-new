@@ -18,8 +18,9 @@ class Character extends FlxSprite
 	public var curCharacter:String = 'bf';
 	public var icon = "dad";
 	public var holdTimer:Float = 0;
-	public var danceSteps = ['idle'];
-	public var curDance = 0;
+	public var danceSteps:Array<String> = ['idle'];
+	public var curDance:Int = 0;
+	public var barColor = "0xaf66ce";
 
 	var script = new Hscript();
 
@@ -40,6 +41,8 @@ class Character extends FlxSprite
 		{
 			trace(e.details());
 			curCharacter = "dad";
+			icon = "dad";
+			barColor = "0xaf66ce";
 			script.loadScript("images/characters/" + "dad" + "/character");
 		}
 		script.call("new");

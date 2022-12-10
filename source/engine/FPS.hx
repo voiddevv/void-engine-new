@@ -63,7 +63,7 @@ class FPS extends TextField
 
 		if (visible)
 		{
-			text = "FPS: " + times.length + "\nMEM: " + mem + " MB\nMEM peak: " + memPeak + " MB\n" + "Void Engine Pre-Alpha " + enginever ;
+			text = "FPS: " + times.length + "\nMEM: " + mem + " MB\nMEM peak: " + memPeak + " MB\n" + "Void Engine Pre-Alpha\n" + "ver: " + enginever ;
 		}
 	}
 }

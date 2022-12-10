@@ -1,9 +1,6 @@
 package gameplay;
 
-import flixel.util.FlxColor;
-import haxe.io.Path;
 import flixel.FlxSubState;
-import sys.thread.Thread;
 import flixel.FlxObject;
 import scripting.Hscript;
 import flixel.text.FlxText;
@@ -107,22 +104,23 @@ class GamePlay extends MusicBeatState
 		super.create();
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, releaseInput);
-		FlxG.sound.playMusic(Paths.inst(SONG.song),0);
+		FlxG.sound.playMusic(Paths.inst(SONG.song), 0);
 		// camera set up
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
 		camHUD.bgColor = 0;
 		camOther.bgColor = 0;
 		FlxG.cameras.add(camHUD, false);
-		FlxG.cameras.add(camOther,false);
+		FlxG.cameras.add(camOther, false);
 		FlxG.camera.follow(camfollow, LOCKON, 0.04);
-		// stage shit
-		stage = new Stage(SONG.stage);
-		curzoom = stage.camZoom;
+		
 		// character shit
 		bf = new Boyfriend(770, 450, SONG.player1);
 		dad = new Character(100, 100, SONG.player2);
 		gf = new Character(400, 130, "gf");
+		// stage shit
+		stage = new Stage(SONG.stage);
+		curzoom = stage.camZoom;
 		// ui
 		UI = new UI();
 		modChart.call("create");
@@ -273,6 +271,7 @@ class GamePlay extends MusicBeatState
 			score = 50;
 			ballin = 0.0;
 			health -= 0.2;
+			misses--;
 		}
 		else if (noteDiff >= 90)
 		{

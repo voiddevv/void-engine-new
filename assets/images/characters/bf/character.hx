@@ -1,6 +1,7 @@
 function new(){
     camoffset = [-100,-100];
     icon = "bf";
+    barColor = "0x31b0d1";
     frames = Paths.getCharacter("SPARROW",curCharacter);
     animation.addByPrefix('idle', 'BF idle dance', 24, false);
     animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);

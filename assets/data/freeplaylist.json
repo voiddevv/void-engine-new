@@ -30,6 +30,27 @@
             "color": "0xaf66ce"
         },
         {
+            "song":"spookeez",
+            "icon":"spooky",
+            "bpm":100,
+            "diffs":["easy","normal","hard"],
+            "color": "0xd57e00"
+        },
+        {
+            "song":"south",
+            "icon":"spooky",
+            "bpm":100,
+            "diffs":["easy","normal","hard"],
+            "color": "0xd57e00"
+        },
+        {
+            "song":"monster",
+            "icon":"monster",
+            "bpm":100,
+            "diffs":["easy","normal","hard"],
+            "color": "0xcad25c"
+        },
+        {
             "song":"triple-trouble",
             "icon":"bf",
             "bpm":100,

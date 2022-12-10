@@ -1,6 +1,6 @@
 function new(){
     camZoom = 0.9;
-    var bg = new FlxSprite(-600, -200);
+    var bg = new FlxSprite(-600, -300);
     bg.frames = Paths.getSparrow('stages/Maze/bg');
     bg.animation.addByPrefix('Maze','Stage', 16);
     bg.antialiasing = true;

@@ -38,7 +38,7 @@ class UI extends FlxSpriteGroup
 			game, "health", 0.0, 2.0);
 		add(healthBarBg);
 		add(healthBar);
-		healthBar.createFilledBar(FlxColor.fromString("0xa344f1"), FlxColor.fromString("0x00c3ff"));
+		healthBar.createFilledBar(FlxColor.fromString(GamePlay.instance.dad.barColor), FlxColor.fromString(GamePlay.instance.bf.barColor));
 		healthBar.x = healthBarBg.x + 4;
 		add(dadIcon);
 		add(bfIcon);

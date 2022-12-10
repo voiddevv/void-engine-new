@@ -229,6 +229,7 @@ class TitleState extends MusicBeatState
 		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
+		FlxG.camera.zoom = CoolUtil.lerp(FlxG.camera.zoom,1,0.05);
 
 		if (gamepad != null)
 		{
@@ -304,7 +305,8 @@ class TitleState extends MusicBeatState
 
 		logoBl.animation.play('bump');
 		danceLeft = !danceLeft;
-
+		if(skippedIntro)
+			FlxG.camera.zoom += 0.05;
 		if (danceLeft)
 			gfDance.animation.play('danceRight');
 		else

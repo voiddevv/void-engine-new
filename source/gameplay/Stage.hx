@@ -8,6 +8,9 @@ class Stage extends FlxSpriteGroup {
     public var camZoom =  1.05;
     public function new(stage:String = 'stage') {
         super();
+        script.interp.variables.set("gf", GamePlay.instance.gf);
+		script.interp.variables.set("dad", GamePlay.instance.dad);
+		script.interp.variables.set("bf", GamePlay.instance.bf);
         script.interp.scriptObject = this;
         try{
             script.loadScript('stages/$stage');
