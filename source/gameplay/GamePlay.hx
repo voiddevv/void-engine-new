@@ -1,5 +1,6 @@
 package gameplay;
 
+import subStates.Pause;
 import flixel.FlxSubState;
 import flixel.FlxObject;
 import scripting.Hscript;
@@ -30,6 +31,7 @@ class GamePlay extends MusicBeatState
 	public static var storyMode:Bool = false;
 	public static var paused:Bool = false;
 	public static var canPause:Bool = true;
+	public static var musicstarted:Bool = false;
 	public static var chartDiff:String = "normal";
 
 	public var UI:UI;
@@ -46,9 +48,9 @@ class GamePlay extends MusicBeatState
 	public var stage:Stage;
 
 	// cameras var
-	var camGame:FlxCamera = FlxG.camera;
-	var camHUD:FlxCamera;
-	var camOther:FlxCamera;
+	public var camGame:FlxCamera = FlxG.camera;
+	public var camHUD:FlxCamera;
+	public var camOther:FlxCamera;
 
 	public var gennedsong:Bool = false;
 
@@ -93,6 +95,7 @@ class GamePlay extends MusicBeatState
 		super();
 		instance = this;
 		modChart.interp.scriptObject = this;
+		paused = false;
 		for (scripts in FileSystem.readDirectory('assets/data/${SONG.song.toLowerCase()}/'))
 		{
 			if (scripts.endsWith('.hx'))
@@ -114,7 +117,7 @@ class GamePlay extends MusicBeatState
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 		FlxG.camera.follow(camfollow, LOCKON, 0.04);
-		
+
 		// character shit
 		bf = new Boyfriend(770, 450, SONG.player1);
 		dad = new Character(100, 100, SONG.player2);
@@ -158,6 +161,8 @@ class GamePlay extends MusicBeatState
 		FlxG.sound.playMusic(Paths.inst(SONG.song), 1, false);
 		FlxG.sound.list.add(voices);
 		voices.play();
+		musicstarted = true;
+		syncAudio();
 	}
 
 	function startCountdown():Void
@@ -484,9 +489,9 @@ class GamePlay extends MusicBeatState
 					keyShit();
 			}
 		}
-		if (gennedsong && FlxG.keys.justPressed.ENTER)
+		if (musicstarted && canPause && FlxG.keys.justPressed.ENTER)
 		{
-			openSubState(new PauseSubState(0, 0));
+			openSubState(new Pause());
 			for (i in FlxG.sound.list)
 				i.pause();
 			FlxG.sound.music.pause();
@@ -837,7 +842,11 @@ class GamePlay extends MusicBeatState
 	public function syncAudio()
 	{
 		trace("synced audio");
-		Conductor.songPosition = voices.time = FlxG.sound.music.time;
+		voices.pause();
+		FlxG.sound.music.play();
+		Conductor.songPosition = FlxG.sound.music.time;
+		voices.time = Conductor.songPosition;
+		voices.play();
 	}
 
 	override function stepHit()
@@ -882,10 +891,15 @@ class GamePlay extends MusicBeatState
 			stroySongIndex++;
 			FlxG.resetState();
 		}
+		paused = false;
+		FlxG.switchState(new MainMenuState());
+	}
+
+	override function destroy()
+	{
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, releaseInput);
 		MemUtil.clearAll();
-		paused = false;
-		FlxG.switchState(new MainMenuState());
+		super.destroy();
 	}
 }
