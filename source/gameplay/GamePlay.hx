@@ -92,6 +92,7 @@ class GamePlay extends MusicBeatState
 	{
 		super();
 		instance = this;
+		modChart.interp.scriptObject = this;
 		for (scripts in FileSystem.readDirectory('assets/data/${SONG.song.toLowerCase()}/'))
 		{
 			if (scripts.endsWith('.hx'))
@@ -271,7 +272,7 @@ class GamePlay extends MusicBeatState
 			score = 50;
 			ballin = 0.0;
 			health -= 0.2;
-			misses--;
+			misses++;
 		}
 		else if (noteDiff >= 90)
 		{

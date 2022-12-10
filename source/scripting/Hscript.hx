@@ -1,4 +1,5 @@
 package scripting;
+import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.system.FlxSound;
@@ -33,6 +34,7 @@ class Hscript
 		interp.variables.set("FlxSound",FlxSound);
 		interp.variables.set("FlxSprite",FlxSprite);
 		interp.variables.set("FlxText",FlxText);
+		interp.variables.set("FlxTween",FlxTween);
 		interp.variables.set("Paths",Paths);
 		interp.variables.set("CoolUtil",CoolUtil);
 		interp.variables.set("MemUtil",MemUtil);

@@ -1,5 +1,6 @@
 package states.menus;
 
+import sys.thread.Thread;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
@@ -36,10 +37,12 @@ class FreePlay extends MusicBeatState
 	var cursong:Int = 0;
 	var curdiff:Int = 1;
 	var diffText = new FlxText();
+	var musicthr:Thread;
 
 	override function create()
 	{
 		super.create();
+
 		bg = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 		add(bg);
 		for (i in 0...freeplayJson.songs.length)
@@ -56,11 +59,12 @@ class FreePlay extends MusicBeatState
 			icon.sprTracker = songText;
 			iconGroup.add(icon);
 		}
+
 		add(songGroup);
 		add(iconGroup);
-        var scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+		var scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		diffText.setPosition(scoreText.x, scoreText.y + 32);
-		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 8, 0).makeGraphic(Std.int(FlxG.width * 0.35), Std.int(66*1.2), 0xFF000000);
+		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 8, 0).makeGraphic(Std.int(FlxG.width * 0.35), Std.int(66 * 1.2), 0xFF000000);
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 		scoreText.setFormat("assets/fonts/vcr.ttf", 32, FlxColor.WHITE, RIGHT);
@@ -101,9 +105,9 @@ class FreePlay extends MusicBeatState
 		diffs = freeplayJson.songs[cursong].diffs;
 		trace(diffs);
 		FlxTween.color(bg, 0.45, bg.color, FlxColor.fromString(freeplayJson.songs[cursong].color));
-		var musicthr = sys.thread.Thread.create(function()
+		var musicthr = Thread.create(function()
 		{
-			FlxG.sound.playMusic(Paths.inst(songs[cursong].toLowerCase()));
+			FlxG.sound.playMusic(Paths.inst(songs[cursong]));
 		});
 	}
 
