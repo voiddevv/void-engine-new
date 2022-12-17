@@ -24,6 +24,7 @@ typedef CharacterJson =
 	var danceSteps:Array<String>;
 	var camOffsets:Array<Int>;
 	var anims:Array<AnimData>;
+	var antialiasing:Bool;
 }
 
 typedef AnimData =
@@ -52,12 +53,8 @@ class Character extends Sprite
 
 	public function new(x:Float, y:Float, character:String)
 	{
-		this.x = x;
-		this.y = y;
-		this.antialiasing = true;
 		super(x, y);
 		this.curCharacter = character;
-		frames = Paths.getCharacter("SPARROW", curCharacter);
 		script.interp.scriptObject = this;
 		try
 		{
@@ -68,18 +65,17 @@ class Character extends Sprite
 			FlxG.log.error(e);
 		}
 		script.call("new");
-		trace(json);
 		dance();
 	}
 
-	public function playAnim(anim:String, force:Bool = false, time:Float = 0.0)
+	public function playAnim(anim:String, force:Bool = false, time:Float = 0.0, frame:Int = 0)
 	{
 		var daOffset = animOffsets.get(anim);
 		if (animOffsets.exists(anim))
 		{
 			offset.set(daOffset[0], daOffset[1]);
 		}
-		animation.play(anim, force);
+		animation.play(anim, force, false, frame);
 	}
 
 	override function update(elapsed:Float)
@@ -93,12 +89,12 @@ class Character extends Sprite
 			else
 				holdTimer = 0;
 
-			if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
+			if (animation.curAnim != null && animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
 			{
-				playAnim('idle', true);
+				playAnim('idle', true, 1.0, 10);
 			}
 
-			if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
+			if (animation.curAnim != null && animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
 			{
 				playAnim('deathLoop');
 			}
@@ -113,12 +109,18 @@ class Character extends Sprite
 		if (curDance > danceSteps.length - 1)
 			curDance = 0;
 	}
-/**loads and parses json**/
+
+	/**loads and parses json**/
 	public function load()
 	{
 		try
 		{
 			json = Json.parse(Assets.getText(Paths.json('images/characters/$curCharacter/character')));
+			if(json.type == null)
+				json.type = "SPARROW";
+			FlxG.log.add(json.type);
+			frames = Paths.getCharacter(json.type, curCharacter);
+			antialiasing = json.antialiasing;
 			icon = json.icon;
 			barColor = json.barColor;
 			camOffset = json.camOffsets;
@@ -128,7 +130,7 @@ class Character extends Sprite
 				addOffset(anim.name, anim.offsets[0], anim.offsets[1]);
 			}
 		}
-		catch (e:Error)
+		catch (e)
 		{
 			FlxG.log.error(e);
 		}

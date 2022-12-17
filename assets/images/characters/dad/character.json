@@ -2,6 +2,7 @@
     "icon": "dad",
     "barColor": "0xad64cb",
     "singDur": 6.1,
+    "antialiasing":true,
     "danceSteps": [
         "idle"
     ],
@@ -13,6 +14,34 @@
         {
             "name":"idle",
 	        "nameInXml":"Dad idle dance",
+	        "frameRate":24,
+	        "looped":false,
+	        "offsets":[0.0,0.0]
+        },
+        {
+            "name":"singLEFT",
+	        "nameInXml":"Dad Sing Note LEFT",
+	        "frameRate":24,
+	        "looped":false,
+	        "offsets":[0.0,0.0]
+        },
+        {
+            "name":"singDOWN",
+	        "nameInXml":"Dad Sing Note DOWN",
+	        "frameRate":24,
+	        "looped":false,
+	        "offsets":[0.0,0.0]
+        },
+        {
+            "name":"singUP",
+	        "nameInXml":"Dad Sing Note UP",
+	        "frameRate":24,
+	        "looped":false,
+	        "offsets":[0.0,0.0]
+        },
+        {
+            "name":"singRIGHT",
+	        "nameInXml":"Dad Sing Note RIGHT",
 	        "frameRate":24,
 	        "looped":false,
 	        "offsets":[0.0,0.0]

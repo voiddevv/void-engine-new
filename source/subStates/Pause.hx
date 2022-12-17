@@ -9,7 +9,7 @@ import flixel.util.FlxColor;
 class Pause extends MusicBeatSubstate
 {
 	/**List of menu options**/
-	var options:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+	var options:Array<String> = ['Resume', 'Restart Song','Skip Time', 'Exit to menu'];
 	var curOption:Int = 0;
 	var optionsGroup = new FlxTypedGroup<Alphabet>();
 	var menuMusic:FlxSound;
@@ -75,6 +75,12 @@ class Pause extends MusicBeatSubstate
 			case 1:
 				FlxG.resetState();
 			case 2:
+				var time = 60*1000;
+				GamePlay.instance.voices.time = time;
+				FlxG.sound.music.time = time;
+				Conductor.songPosition = time;
+				close();
+			case 3:
 				FlxG.switchState(new MainMenu());
                 menuMusic.stop();
 		}
