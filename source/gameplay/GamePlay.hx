@@ -258,9 +258,7 @@ class GamePlay extends MusicBeatState
 		msText.scrollFactor.set();
 		msText.text = '${FlxMath.roundDecimal(noteDiff, 2)} ms';
 		add(msText);
-
 		var placement:String = Std.string(combo);
-
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.55;
@@ -541,7 +539,8 @@ class GamePlay extends MusicBeatState
 
 		UI.dadStrum.members[note.noteData].animation.play('confirm', true);
 		UI.dadStrum.members[note.noteData].centerOffsets();
-		UI.dadStrum.members[note.noteData].offset.set(47, 50);
+		UI.dadStrum.members[note.noteData].offset.x -= 13;
+		UI.dadStrum.members[note.noteData].offset.y -= 13;
 
 		note.wasGoodHit = true;
 		voices.volume = 1;
@@ -576,9 +575,8 @@ class GamePlay extends MusicBeatState
 
 			UI.playerStrum.members[note.noteData].animation.play('confirm', true);
 			UI.playerStrum.members[note.noteData].centerOffsets();
-			// if(pixel)
-			UI.playerStrum.members[note.noteData].offset.set(47, 50);
-
+			UI.playerStrum.members[note.noteData].offset.x -= 13;
+			UI.playerStrum.members[note.noteData].offset.y -= 13;
 			note.wasGoodHit = true;
 			voices.volume = 1;
 
@@ -832,10 +830,15 @@ class GamePlay extends MusicBeatState
 				}
 			}
 		}
-		if (bf.holdTimer > Conductor.stepCrochet * 4 * 0.001 && (!holdArray.contains(true)))
+		if (bf.holdTimer > Conductor.stepCrochet * bf.singDur * 0.001 && (!holdArray.contains(true)))
 		{
 			if (bf.animation.curAnim.name.startsWith('sing') && !bf.animation.curAnim.name.endsWith('miss'))
 				bf.dance();
+		}
+		if (dad.holdTimer > Conductor.stepCrochet * dad.singDur * 0.001 && (!holdArray.contains(true)))
+		{
+			if (dad.animation.curAnim.name.startsWith('sing') && !dad.animation.curAnim.name.endsWith('miss'))
+				dad.dance();
 		}
 	}
 
@@ -859,9 +862,9 @@ class GamePlay extends MusicBeatState
 		modChart.call("stepHit", [curStep]);
 		// section shit
 		if (SONG.notes[Std.int(curStep / 16)] != null && SONG.notes[Std.int(curStep / 16)].mustHitSection)
-			camPos.set(bf.getMidpoint().x + bf.camoffset[0], bf.getMidpoint().y + bf.camoffset[1]);
+			camPos.set(bf.getMidpoint().x + bf.camOffset[0], bf.getMidpoint().y + bf.camOffset[1]);
 		else
-			camPos.set(dad.getMidpoint().x + dad.camoffset[0], dad.getMidpoint().y + dad.camoffset[1]);
+			camPos.set(dad.getMidpoint().x + dad.camOffset[0], dad.getMidpoint().y + dad.camOffset[1]);
 	}
 
 	override function beatHit()

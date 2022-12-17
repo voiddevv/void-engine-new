@@ -5,7 +5,7 @@ import openfl.system.System;
 import flixel.FlxG;
 import openfl.Assets as OpenFlAssets;
 import lime.utils.Assets as LimeAssets;
-
+/** utills for  memorey man**/
 class MemUtil
 {
 	public static function clearSound()

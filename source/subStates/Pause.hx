@@ -8,15 +8,16 @@ import flixel.util.FlxColor;
 
 class Pause extends MusicBeatSubstate
 {
+	/**List of menu options**/
 	var options:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
 	var curOption:Int = 0;
 	var optionsGroup = new FlxTypedGroup<Alphabet>();
 	var menuMusic:FlxSound;
-
 	override function create()
 	{
 		super.create();
 		menuMusic = new FlxSound().loadEmbedded(Paths.music("breakfast"), true);
+		FlxG.sound.list.add(menuMusic);
 		menuMusic.volume = 0;
 		menuMusic.fadeIn();
 		menuMusic.play(true);
@@ -33,8 +34,9 @@ class Pause extends MusicBeatSubstate
 			optionsGroup.add(text);
 		}
 		add(optionsGroup);
+		changeItem();
 	}
-
+	/**Closes the pause menu**/
 	override function close()
 	{
 		menuMusic.stop();
@@ -44,7 +46,7 @@ class Pause extends MusicBeatSubstate
 		GamePlay.instance.syncAudio();
 		super.close();
 	}
-
+	/**changes the current oprion**/
 	function changeItem(a:Int = 0)
 	{
 		FlxG.sound.play(Paths.sound("scrollMenu"));
@@ -63,7 +65,7 @@ class Pause extends MusicBeatSubstate
 				item.alpha = 1;
 		}
 	}
-
+	/**SEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEXSEX**/
 	function sex(a:Int)
 	{
 		switch (a)
@@ -73,7 +75,7 @@ class Pause extends MusicBeatSubstate
 			case 1:
 				FlxG.resetState();
 			case 2:
-				FlxG.switchState(new MainMenuState());
+				FlxG.switchState(new MainMenu());
                 menuMusic.stop();
 		}
 	}

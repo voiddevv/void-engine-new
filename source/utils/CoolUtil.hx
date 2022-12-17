@@ -19,8 +19,13 @@ class CoolUtil
 
 		return daList;
 	}
-	public static function lerp(x:Float,y:Float,z:Float) {
-		return FlxMath.lerp(x,y,FlxG.elapsed/(1/60)*z);
+
+	/**
+	 * It's a better lerp function.
+	 */
+	public static function lerp(x:Float, y:Float, z:Float)
+	{
+		return FlxMath.lerp(x, y, FlxG.elapsed / (1 / 60) * z);
 	}
 
 	public static function numberArray(max:Int, ?min = 0):Array<Int>

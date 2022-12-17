@@ -2,7 +2,6 @@ package gameplay;
 
 import scripting.Hscript;
 import flixel.group.FlxSpriteGroup;
-
 class Stage extends FlxSpriteGroup {
     public var script = new Hscript();
     public var camZoom =  1.05;

@@ -1,136 +1,136 @@
 package;
 
+import hscript.Expr.Error;
+import openfl.display.JointStyle;
+import openfl.display.Window;
+import flixel.input.FlxInput;
+import haxe.io.Input;
+import haxe.Json;
+import openfl.Assets;
+import flixel.util.FlxColor;
+import engine.objects.Sprite;
 import flixel.util.FlxTimer;
 import scripting.Hscript;
 import flixel.FlxSprite;
-import flixel.animation.FlxBaseAnimation;
-import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 
-class Character extends FlxSprite
+typedef CharacterJson =
 {
+	var type:String;
+	var icon:String;
+	var barColor:String;
+	var singDur:Float;
+	var danceSteps:Array<String>;
+	var camOffsets:Array<Int>;
+	var anims:Array<AnimData>;
+}
+
+typedef AnimData =
+{
+	var name:String;
+	var nameInXml:String;
+	var frameRate:Int;
+	var looped:Bool;
+	var offsets:Array<Float>;
+}
+
+class Character extends Sprite
+{
+	public var json:CharacterJson;
+	public var script = new Hscript();
+	public var curCharacter:String = '';
 	public var canDance:Bool = true;
-	public var animOffsets:Map<String, Array<Dynamic>>;
-	public var debugMode:Bool = false;
-	public var camoffset = [0,0];
-	public var isPlayer:Bool = false;
-	public var curCharacter:String = 'bf';
-	public var icon = "dad";
-	public var holdTimer:Float = 0;
-	public var danceSteps:Array<String> = ['idle'];
+	public var danceSteps:Array<String> = ["idle"];
 	public var curDance:Int = 0;
-	public var barColor = "0xaf66ce";
+	public var holdTimer:Float = 0.0;
+	public var debugMode:Bool = false;
+	public var icon:String = "dad";
+	public var barColor:String = "0xaf66ce";
+	public var camOffset:Array<Int> = [0, 0];
+	public var singDur:Float = 4.0;
 
-	var script = new Hscript();
-
-	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
+	public function new(x:Float, y:Float, character:String)
 	{
+		this.x = x;
+		this.y = y;
+		this.antialiasing = true;
 		super(x, y);
-
-		animOffsets = new Map<String, Array<Dynamic>>();
-		curCharacter = character;
-		this.isPlayer = isPlayer;
-		antialiasing = true;
+		this.curCharacter = character;
+		frames = Paths.getCharacter("SPARROW", curCharacter);
 		script.interp.scriptObject = this;
 		try
 		{
-			script.loadScript("images/characters/" + curCharacter + "/character");
+			script.loadScript('images/characters/$curCharacter/character');
 		}
 		catch (e)
 		{
-			trace(e.details());
-			curCharacter = "dad";
-			icon = "dad";
-			barColor = "0xaf66ce";
-			script.loadScript("images/characters/" + "dad" + "/character");
+			FlxG.log.error(e);
 		}
 		script.call("new");
+		trace(json);
 		dance();
-		if (isPlayer)
+	}
+
+	public function playAnim(anim:String, force:Bool = false, time:Float = 0.0)
+	{
+		var daOffset = animOffsets.get(anim);
+		if (animOffsets.exists(anim))
 		{
-			flipX = !flipX;
-
-			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf'))
-			{
-				// var animArray
-				var oldRight = animation.getByName('singRIGHT').frames;
-				animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
-				animation.getByName('singLEFT').frames = oldRight;
-
-				// IF THEY HAVE MISS ANIMATIONS??
-				if (animation.getByName('singRIGHTmiss') != null)
-				{
-					var oldMiss = animation.getByName('singRIGHTmiss').frames;
-					animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
-					animation.getByName('singLEFTmiss').frames = oldMiss;
-				}
-			}
+			offset.set(daOffset[0], daOffset[1]);
 		}
+		animation.play(anim, force);
 	}
 
 	override function update(elapsed:Float)
 	{
-		script.call('update', [elapsed]);
-		if (!curCharacter.startsWith('bf'))
+		if (!debugMode)
 		{
-			if (animation.curAnim.name.startsWith('sing'))
+			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
 			{
 				holdTimer += elapsed;
 			}
-			var dadVar:Float = 4;
-
-			if (curCharacter == 'dad')
-				dadVar = 6.1;
-			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
-			{
-				dance();
+			else
 				holdTimer = 0;
+
+			if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
+			{
+				playAnim('idle', true);
+			}
+
+			if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
+			{
+				playAnim('deathLoop');
 			}
 		}
-
 		super.update(elapsed);
 	}
 
-	/**
-	 * 
-	 */
 	public function dance()
 	{
-		if (!debugMode)
-		{
-			playAnim(danceSteps[curDance]);
-			curDance++;
-			if (curDance > danceSteps.length - 1)
-				curDance = 0;
-		}
+		playAnim(danceSteps[curDance]);
+		curDance++;
+		if (curDance > danceSteps.length - 1)
+			curDance = 0;
 	}
-
-	public function playAnim(AnimName:String, Force:Bool = false, timer:Float = 0, Reversed:Bool = false, Frame:Int = 0):Void
+/**loads and parses json**/
+	public function load()
 	{
-		if (timer > 0.0)
+		try
 		{
-			canDance = false;
-			new FlxTimer().start(timer, function(tmr:FlxTimer)
+			json = Json.parse(Assets.getText(Paths.json('images/characters/$curCharacter/character')));
+			icon = json.icon;
+			barColor = json.barColor;
+			camOffset = json.camOffsets;
+			for (anim in json.anims)
 			{
-				canDance = true;
-			});
+				animation.addByPrefix(anim.name, anim.nameInXml, anim.frameRate, anim.looped);
+				addOffset(anim.name, anim.offsets[0], anim.offsets[1]);
+			}
 		}
-
-		animation.play(AnimName, Force, Reversed, Frame);
-
-		var daOffset = animOffsets.get(animation.curAnim.name);
-		if (animOffsets.exists(animation.curAnim.name))
+		catch (e:Error)
 		{
-			offset.set(daOffset[0], daOffset[1]);
+			FlxG.log.error(e);
 		}
-		else
-			offset.set(0, 0);
-	}
-
-	public function addOffset(name:String, x:Float = 0, y:Float = 0)
-	{
-		animOffsets[name] = [x, y];
 	}
 }

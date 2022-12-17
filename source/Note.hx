@@ -43,7 +43,7 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var daStage:String = PlayState.curStage;
+		var daStage:String = GamePlay.SONG.stage;
 
 		switch (daStage)
 		{
@@ -70,7 +70,7 @@ class Note extends FlxSprite
 					animation.add('bluehold', [1]);
 				}
 
-				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
+				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 
 			default:

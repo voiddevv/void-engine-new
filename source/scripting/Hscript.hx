@@ -1,4 +1,5 @@
 package scripting;
+import engine.objects.Sprite;
 import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
@@ -8,12 +9,14 @@ import hscript.Parser;
 import hscript.Interp;
 import StringTools;
 
+/**
+class for funni hscript
+**/
 class Hscript
 {
 	public var interp = new Interp();
 	public var parser = new Parser();
 	public var script:hscript.Expr;
-
 	public function new()
 	{
 		parser.allowTypes = true;
@@ -33,6 +36,7 @@ class Hscript
 		interp.variables.set("FlxG",FlxG);
 		interp.variables.set("FlxSound",FlxSound);
 		interp.variables.set("FlxSprite",FlxSprite);
+		interp.variables.set("Sprite",Sprite);
 		interp.variables.set("FlxText",FlxText);
 		interp.variables.set("FlxTween",FlxTween);
 		interp.variables.set("Paths",Paths);

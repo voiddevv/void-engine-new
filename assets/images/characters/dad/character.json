@@ -1,0 +1,21 @@
+{
+    "icon": "dad",
+    "barColor": "0xad64cb",
+    "singDur": 6.1,
+    "danceSteps": [
+        "idle"
+    ],
+    "camOffsets": [
+        100,
+        -200
+    ],
+    "anims": [
+        {
+            "name":"idle",
+	        "nameInXml":"Dad idle dance",
+	        "frameRate":24,
+	        "looped":false,
+	        "offsets":[0.0,0.0]
+        }
+    ]
+}

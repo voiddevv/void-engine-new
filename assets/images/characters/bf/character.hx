@@ -36,6 +36,4 @@ function new(){
     addOffset('scared', -4);
 
     playAnim('idle',false);
-
-    flipX = true;
 }

@@ -44,7 +44,7 @@ class UI extends FlxSpriteGroup
 		add(bfIcon);
 		bfIcon.y = dadIcon.y = FlxG.height * 0.8;
 		scoretext.y = FlxG.height*0.95;
-		scoretext.setFormat(Paths.font("vcr.ttf"),18,FlxColor.WHITE,CENTER,OUTLINE,FlxColor.BLACK);
+		scoretext.setFormat(Paths.font("vcr.ttf"),16,FlxColor.WHITE,CENTER,OUTLINE,FlxColor.BLACK);
 		add(scoretext);
 		scoretext.screenCenter(X);
 	}
@@ -52,8 +52,9 @@ class UI extends FlxSpriteGroup
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		dadIcon.scale.set(CoolUtil.lerp(dadIcon.scale.x, 1, 0.2), CoolUtil.lerp(dadIcon.scale.y, 1, 0.2));
-		bfIcon.scale.set(CoolUtil.lerp(bfIcon.scale.x, 1, 0.2), CoolUtil.lerp(bfIcon.scale.y, 1, 0.2));
+		var iconLerp:Float = 0.45;
+		dadIcon.scale.set(CoolUtil.lerp(dadIcon.scale.x, 1, iconLerp), CoolUtil.lerp(dadIcon.scale.y, 1, iconLerp));
+		bfIcon.scale.set(CoolUtil.lerp(bfIcon.scale.x, 1, iconLerp), CoolUtil.lerp(bfIcon.scale.y, 1, iconLerp));
 
 		dadIcon.updateHitbox();
 		bfIcon.updateHitbox();

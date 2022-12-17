@@ -120,7 +120,6 @@ class PauseSubState extends MusicBeatSubstate
 			curSelected = 0;
 
 		var bullShit:Int = 0;
-
 		for (item in grpMenuShit.members)
 		{
 			item.targetY = bullShit - curSelected;

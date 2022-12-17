@@ -274,7 +274,7 @@ class StoryMenuState extends MusicBeatState
 		{
 			FlxG.sound.play('assets/sounds/cancelMenu' + TitleState.soundExt);
 			movedBack = true;
-			FlxG.switchState(new MainMenuState());
+			FlxG.switchState(new MainMenu());
 		}
 
 		super.update(elapsed);
@@ -297,8 +297,8 @@ class StoryMenuState extends MusicBeatState
 				stopspamming = true;
 			}
 
-			PlayState.storyPlaylist = weekData[curWeek];
-			PlayState.isStoryMode = true;
+			// PlayState.storyPlaylist = weekData[curWeek];
+			// PlayState.isStoryMode = true;
 			selectedWeek = true;
 
 			var diffic = "";
@@ -314,8 +314,8 @@ class StoryMenuState extends MusicBeatState
 			// GamePlay.storyDifficulty = curDifficulty;
 
 			// GamePlay.SONG = gameplay.ChartParser.parse(weekData[curWeek]);
-			PlayState.storyWeek = curWeek;
-			PlayState.campaignScore = 0;
+			// PlayState.storyWeek = curWeek;
+			// PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
 				if (FlxG.sound.music != null)

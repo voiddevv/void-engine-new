@@ -20,6 +20,4 @@ function new(){
     addOffset("singLEFTmiss", 12, 24);
     addOffset("singDOWNmiss", -11, -19);
     playAnim('idle');
-
-    flipX = true;
 }
