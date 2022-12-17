@@ -77,7 +77,7 @@ class MainMenu extends MusicBeatState
 	{
         if(issex)
             return;
-		FlxG.sound.play('assets/sounds/confirmMenu' + TitleState.soundExt);
+		FlxG.sound.play('assets/sounds/confirmMenu' + ".ogg");
 		FlxFlicker.flicker(bg2, 1.1, 0.15, false);
 		optionsGroup.forEach(function(spr:FlxSprite)
 		{

@@ -190,7 +190,7 @@ class GamePlay extends MusicBeatState
 
 			{
 				case 0:
-					FlxG.sound.play('assets/sounds/intro3' + altSuffix + TitleState.soundExt, 0.6);
+					FlxG.sound.play('assets/sounds/intro3' + altSuffix + ".ogg", 0.6);
 				case 1:
 					var ready:FlxSprite = new FlxSprite().loadGraphic('assets/images/' + introAlts[0]);
 					ready.scrollFactor.set();
@@ -205,7 +205,7 @@ class GamePlay extends MusicBeatState
 							ready.destroy();
 						}
 					});
-					FlxG.sound.play('assets/sounds/intro2' + altSuffix + TitleState.soundExt, 0.6);
+					FlxG.sound.play('assets/sounds/intro2' + altSuffix + ".ogg", 0.6);
 				case 2:
 					var set:FlxSprite = new FlxSprite().loadGraphic('assets/images/' + introAlts[1]);
 					set.scrollFactor.set();
@@ -219,7 +219,7 @@ class GamePlay extends MusicBeatState
 							set.destroy();
 						}
 					});
-					FlxG.sound.play('assets/sounds/intro1' + altSuffix + TitleState.soundExt, 0.6);
+					FlxG.sound.play('assets/sounds/intro1' + altSuffix + ".ogg", 0.6);
 				case 3:
 					var go:FlxSprite = new FlxSprite().loadGraphic('assets/images/' + introAlts[2]);
 					go.scrollFactor.set();
@@ -235,7 +235,7 @@ class GamePlay extends MusicBeatState
 							go.destroy();
 						}
 					});
-					FlxG.sound.play('assets/sounds/introGo' + altSuffix + TitleState.soundExt, 0.6);
+					FlxG.sound.play('assets/sounds/introGo' + altSuffix + ".ogg", 0.6);
 				case 4:
 					startMusic();
 					gennedsong = true;
