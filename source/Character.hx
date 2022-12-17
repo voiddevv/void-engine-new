@@ -116,26 +116,17 @@ class Character extends Sprite
 		try
 		{
 			json = Json.parse(Assets.getText(Paths.json('images/characters/$curCharacter/character')));
-
 			if (json.type == null)
 				json.type = "SPARROW";
-
 			FlxG.log.add(json.type);
-
 			frames = Paths.getCharacter(json.type, curCharacter);
-
 			antialiasing = json.antialiasing;
-
 			icon = json.icon;
-
 			barColor = json.barColor;
-
 			camOffset = json.camOffsets;
-
 			for (anim in json.anims)
 			{
 				animation.addByPrefix(anim.name, anim.nameInXml, anim.frameRate, anim.looped);
-
 				addOffset(anim.name, anim.offsets[0], anim.offsets[1]);
 			}
 		}
