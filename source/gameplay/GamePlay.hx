@@ -449,7 +449,7 @@ class GamePlay extends MusicBeatState
 
 					// i am so fucking sorry for this if condition
 					if (daNote.isSustainNote
-						&& daNote.y + daNote.offset.y <= UI.dadStrum.y + 25 + Note.swagWidth / 2
+						&& daNote.y + daNote.offset.y <= UI.dadStrum.y + Note.swagWidth / 2
 						&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
 					{
 						var swagRect = new FlxRect(0, UI.dadStrum.y + Note.swagWidth / 2 - daNote.y, daNote.width * 2, daNote.height * 2);
