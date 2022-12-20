@@ -54,13 +54,12 @@
 
 	<haxelib name="flixel" />
 	<haxedev set='webgl' />
-
+	<haxelib name="haxeui-flixel" />
+	<haxelib name="haxeui-core" />
 	<!--In case you want to use the addons package-->
 	<haxelib name="hscript-improved" />
-
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
-
 	<!-- <haxelib name="markdown" /> -->
 	<!-- <haxelib name="HtmlParser" /> -->
 

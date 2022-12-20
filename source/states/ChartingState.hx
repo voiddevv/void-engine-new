@@ -1,5 +1,6 @@
 package states;
 
+import gameplay.GamePlay;
 import Section.SwagSection;
 import Song.SwagSong;
 import Conductor.BPMChangeEvent;
@@ -110,8 +111,8 @@ class ChartingState extends MusicBeatState
 		curRenderedNotes = new FlxTypedGroup<Note>();
 		curRenderedSustains = new FlxTypedGroup<FlxSprite>();
 
-		if (PlayState.SONG != null)
-			_song = PlayState.SONG;
+		if (GamePlay.SONG != null)
+			_song = GamePlay.SONG;
 		else
 		{
 			_song = {
@@ -352,10 +353,10 @@ class ChartingState extends MusicBeatState
 			// vocals.stop();
 		}
 
-		FlxG.sound.playMusic('assets/music/' + daSong + "_Inst" + TitleState.soundExt, 0.6);
+		FlxG.sound.playMusic(Paths.inst(_song.song), 0.6);
 
 		// WONT WORK FOR TUTORIAL OR TEST SONG!!! REDO LATER
-		vocals = new FlxSound().loadEmbedded("assets/music/" + daSong + "_Voices" + TitleState.soundExt);
+		vocals = new FlxSound().loadEmbedded(Paths.voices(_song.song));
 		FlxG.sound.list.add(vocals);
 
 		FlxG.sound.music.pause();
@@ -545,10 +546,10 @@ class ChartingState extends MusicBeatState
 		{
 			lastSection = curSection;
 
-			PlayState.SONG = _song;
+			GamePlay.SONG = _song;
 			FlxG.sound.music.stop();
 			vocals.stop();
-			FlxG.switchState(new PlayState());
+			FlxG.switchState(new GamePlay());
 		}
 
 		if (FlxG.keys.justPressed.E)
@@ -1020,13 +1021,13 @@ class ChartingState extends MusicBeatState
 
 	function loadJson(song:String):Void
 	{
-		PlayState.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
+		GamePlay.SONG = Song.loadFromJson(song.toLowerCase(), song.toLowerCase());
 		FlxG.resetState();
 	}
 
 	function loadAutosave():Void
 	{
-		PlayState.SONG = Song.parseJSONshit(FlxG.save.data.autosave);
+		GamePlay.SONG = Song.parseJSONshit(FlxG.save.data.autosave);
 		FlxG.resetState();
 	}
 

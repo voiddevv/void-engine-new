@@ -68,6 +68,21 @@ class Character extends Sprite
 		dance();
 	}
 
+	public function changeCharacter(newCharacter:String)
+	{
+		this.curCharacter = newCharacter;
+		script.interp.scriptObject = this;
+		try
+		{
+			script.loadScript('images/characters/$curCharacter/character');
+		}
+		catch (e)
+		{
+			FlxG.log.error(e);
+		}
+		script.call("new");
+	}
+
 	public function playAnim(anim:String, force:Bool = false, time:Float = 0.0, frame:Int = 0)
 	{
 		var daOffset = animOffsets.get(anim);

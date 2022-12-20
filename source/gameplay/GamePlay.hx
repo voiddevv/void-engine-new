@@ -535,7 +535,7 @@ class GamePlay extends MusicBeatState
 		dad.holdTimer = 0;
 		var dirs = ["LEFT", "DOWN", "UP", "RIGHT"];
 		for (i in dadGroup.members)
-			i.playAnim('sing${dirs[note.noteData]}', true);
+			i.playAnim('sing${dirs[note.noteData]}', true,0.0,0);
 
 		UI.dadStrum.members[note.noteData].animation.play('confirm', true);
 		UI.dadStrum.members[note.noteData].centerOffsets();

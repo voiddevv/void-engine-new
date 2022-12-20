@@ -38,6 +38,8 @@ class Options extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		if(FlxG.keys.anyJustPressed(Controls.ui_BACK))
+			FlxG.switchState(new MainMenu());
 		if (FlxG.keys.justPressed.DOWN)
 			changeOption(1);
 		if (FlxG.keys.justPressed.UP)

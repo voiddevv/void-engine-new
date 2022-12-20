@@ -10,11 +10,14 @@ class TitleScreen extends MusicBeatState {
         FlxTransitionableState.skipNextTransIn = true;
         FlxTransitionableState.skipNextTransOut = true;
         super();
+        FlxTransitionableState.skipNextTransIn = true;
+        FlxTransitionableState.skipNextTransOut = true;
     }
     var gf:Sprite;
     var logo:Sprite;
     var enterText:Sprite;
     var danced:Bool = false;
+    var enterd:Bool = false;
     override function create() {
         super.create();
         Conductor.changeBPM(102);
@@ -40,13 +43,14 @@ class TitleScreen extends MusicBeatState {
         super.update(elapsed);
         if(FlxG.sound.music != null)
             Conductor.songPosition = FlxG.sound.music.time;
-        if(FlxG.keys.anyJustPressed(Controls.ui_ENTER)){
+        if(FlxG.keys.anyJustPressed(Controls.ui_ENTER) && !enterd){
             FlxG.camera.flash();
             FlxG.sound.play(Paths.sound("confirmMenu"));
             enterText.play("pressed",true);
             new FlxTimer().start(1.2,function (tmr:FlxTimer) {
                FlxG.switchState(new MainMenu());
             });
+            enterd = true;
         }
     }
     override function beatHit() {

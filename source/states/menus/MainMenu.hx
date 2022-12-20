@@ -1,5 +1,7 @@
 package states.menus;
 
+import states.menus.editers.CharacterEditor;
+import states.menus.editers.CharacterEditernew.CharacterEditornew;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.effects.FlxFlicker;
@@ -49,6 +51,8 @@ class MainMenu extends MusicBeatState
 			i.screenCenter(X);
 			i.updateHitbox();
 		}
+		if(FlxG.keys.justPressed.FOUR)
+			FlxG.switchState(new CharacterEditor());
 		if (FlxG.keys.justPressed.UP)
 			changeItem(-1);
 		if (FlxG.keys.justPressed.DOWN)
