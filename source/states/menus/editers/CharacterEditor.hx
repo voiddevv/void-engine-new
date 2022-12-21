@@ -181,6 +181,7 @@ class CharacterEditor extends MusicBeatState
 				}
 			}
 		});
+		
 		animDropDown.setSize(300, 150);
 		loopedCheckBox = new FlxUICheckBox(uiBox.x + uiBox.width / 1.5, 40, null, null, "Looped", 50, null, function()
 		{

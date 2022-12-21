@@ -536,8 +536,7 @@ class GamePlay extends MusicBeatState
 		var dirs = ["LEFT", "DOWN", "UP", "RIGHT"];
 		for (i in dadGroup.members)
 			i.playAnim('sing${dirs[note.noteData]}', true,0.0,0);
-
-		UI.dadStrum.members[note.noteData].animation.play('confirm', true);
+		UI.dadStrum.members[note.noteData].animation.play('confirm', false,false,0);
 		UI.dadStrum.members[note.noteData].centerOffsets();
 		UI.dadStrum.members[note.noteData].offset.x -= 13;
 		UI.dadStrum.members[note.noteData].offset.y -= 13;
@@ -554,7 +553,7 @@ class GamePlay extends MusicBeatState
 		UI.dadStrum.members[note.noteData].animation.finishCallback = function(name:String)
 		{
 			if (name == "confirm")
-				UI.dadStrum.members[note.noteData].animation.play("static");
+				UI.dadStrum.members[note.noteData].animation.play("static",true);
 			UI.dadStrum.members[note.noteData].updateHitbox();
 		}
 	}

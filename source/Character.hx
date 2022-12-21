@@ -1,5 +1,6 @@
 package;
 
+import flixel.math.FlxMath;
 import hscript.Expr.Error;
 import openfl.display.JointStyle;
 import openfl.display.Window;
@@ -56,7 +57,16 @@ class Character extends Sprite
 	public function new(x:Float, y:Float, character:String)
 	{
 		super(x, y);
+
 		this.curCharacter = character;
+		try
+		{
+			json = Json.parse(Assets.getText(Paths.json('images/characters/$curCharacter/character')));
+		}
+		catch(e){
+			FlxG.log.warn(e);
+			json = Json.parse(Assets.getText(Paths.json('images/characters/dad/character')));
+		}
 		script.interp.scriptObject = this;
 		try
 		{
@@ -134,7 +144,6 @@ class Character extends Sprite
 	{
 		try
 		{
-			json = Json.parse(Assets.getText(Paths.json('images/characters/$curCharacter/character')));
 			if (json.type == null)
 				json.type = "SPARROW";
 			FlxG.log.add(json.type);
