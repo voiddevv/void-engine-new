@@ -1,7 +1,6 @@
 package states.menus;
 
 import states.menus.editers.CharacterEditor;
-import states.menus.editers.CharacterEditernew.CharacterEditornew;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.effects.FlxFlicker;
