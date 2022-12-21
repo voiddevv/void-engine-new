@@ -1,4 +1,5 @@
 #/bin/bash
+haxelib install haxeui-flixel
 haxelib git flixel https://github.com/Leather128/flixel
 haxelib install flixel-ui
 haxelib git openfl https://github.com/openfl/openfl
