@@ -24,7 +24,7 @@ class Stage extends FlxSpriteGroup
 		}
 		catch (e)
 		{
-			trace(e.details());
+			FlxG.log.error(e);
 			script.loadScript('stages/stage');
 		}
 		script.call("new");

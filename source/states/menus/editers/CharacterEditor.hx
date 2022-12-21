@@ -1,5 +1,6 @@
 package states.menus.editers;
 
+import flixel.addons.ui.FlxUICheckBox;
 import states.menus.editers.submenus.AddAnim;
 import flixel.math.FlxRect;
 import sys.FileSystem;
@@ -16,7 +17,7 @@ import flixel.FlxCamera;
 import gameplay.Stage;
 import flixel.ui.FlxButton;
 import flixel.addons.ui.FlxInputText;
-
+using StringTools;
 class CharacterEditor extends MusicBeatState
 {
 	var file:FileReference;
@@ -32,6 +33,7 @@ class CharacterEditor extends MusicBeatState
 
 	var animsText:FlxText;
 	var animDropDown:FlxUIDropDownMenu;
+	var loopedCheckBox:FlxUICheckBox;
 	var characterDropDown:FlxUIDropDownMenu;
 	var uiBox:FlxUITabMenu;
 	var saveBut:FlxButton;
@@ -40,6 +42,7 @@ class CharacterEditor extends MusicBeatState
 	var AnimTab = new FlxSpriteGroup();
 	var addAnimBut:FlxButton;
 	var textHitBox:FlxRect;
+	var indicesTextBox:FlxUIInputText;
 	var tabs = [
 		{name: "Character", label: 'Character'},
 		{name: "Animation", label: 'Animation'},
@@ -48,6 +51,8 @@ class CharacterEditor extends MusicBeatState
 	override function create()
 	{
 		current = this;
+		FlxG.cameras.add(uiCAM, false);
+		uiCAM.bgColor = 0;
 		character = new Character(100, 100, "dad");
 		if (character.json != null)
 		{
@@ -58,6 +63,11 @@ class CharacterEditor extends MusicBeatState
 		{
 			FlxG.log.error("json not Found For Character " + character.curCharacter);
 		}
+
+		super.create();
+		uiBox = new FlxUITabMenu(null, tabs, true);
+		uiBox.resize(300, 200);
+		uiBox.x = 830;
 		var charactersList:Array<String> = [];
 		FlxG.mouse.useSystemCursor = true;
 		for (dir in FileSystem.readDirectory('assets/images/characters'))
@@ -65,14 +75,30 @@ class CharacterEditor extends MusicBeatState
 			if (FileSystem.isDirectory('assets/images/characters/$dir'))
 				charactersList.push(dir);
 		}
-		addAnimBut = new FlxButton(1130, 150, "Add Anim", function()
+		addAnimBut = new FlxButton(uiBox.x + uiBox.width / 8 + 12, 110, "Add Anim", function()
 		{
 			openSubState(new AddAnim());
 		});
+		indicesTextBox = new FlxUIInputText(uiBox.x + uiBox.width / 1.5, uiBox.y + uiBox.height / 2.5, 50, '', 8, 0xFF000000, 0xFFFFFFFF);
+		indicesTextBox.callback = function(text:String, j:String)
+		{
+			for (anim in json.anims)
+			{
+				if (anim.name == curAnim)
+				{
+					var fakerIndices = text.split(",");
+					var indices = [];
+					for (number in fakerIndices)
+					{
+						indices.push(Std.parseInt(number.trim()));
+					}
 
-		uiCAM.bgColor = 0;
-		FlxG.cameras.add(uiCAM, false);
-		offsetsTextBox = new FlxUIInputText(0, 75, 100, '', 12, 0xFF000000, 0xFFFFFFFF);
+					anim.indices = indices;
+					trace(indices);
+				}
+			}
+		}
+		offsetsTextBox = new FlxUIInputText(uiBox.x + uiBox.width / 8 + 6, 75, 100, '', 12, 0xFF000000, 0xFFFFFFFF);
 		offsetsTextBox.callback = function(text:String, cool:String)
 		{
 			try
@@ -100,23 +126,15 @@ class CharacterEditor extends MusicBeatState
 				FlxG.log.error(e.details());
 			}
 		}
-
-		offsetsTextBox.screenCenter(X);
-		offsetsTextBox.x += 530;
-		textHitBox = new FlxRect(offsetsTextBox.x, offsetsTextBox.y, offsetsTextBox.width, offsetsTextBox.height);
-		saveBut = new FlxButton(50, 175, "Save Character", function()
+		saveBut = new FlxButton(uiBox.x + uiBox.width / 8 + 12, uiBox.y + uiBox.height - 50, "Save Character", function()
 		{
 			FlxG.log.notice("saveing data");
 			file = new FileReference();
 			file.save(Json.stringify(json, "\t"), "character.json");
 			trace(json);
 		});
-		saveBut.screenCenter(X);
-		saveBut.x += 530;
-		super.create();
-		uiBox = new FlxUITabMenu(null, tabs, true);
-		uiBox.x = 1078;
-		characterDropDown = new FlxUIDropDownMenu(uiBox.x + 30, 100, FlxUIDropDownMenu.makeStrIdLabelArray(charactersList, false), function(character:String)
+		characterDropDown = new FlxUIDropDownMenu(uiBox.x + uiBox.width / 8, uiBox.y + uiBox.height / 4,
+			FlxUIDropDownMenu.makeStrIdLabelArray(charactersList, false), function(character:String)
 		{
 			try
 			{
@@ -129,13 +147,14 @@ class CharacterEditor extends MusicBeatState
 			{
 				FlxG.log.error(e.details());
 				json = {
+					globalOffset: [0, 0],
 					icon: "dad",
-					singDur:  4.0,
+					singDur: 4.0,
 					barColor: "0xFFFF0000",
 					antialiasing: true,
 					type: "SPARROW",
 					danceSteps: ["idle"],
-					camOffsets: [0,0],
+					camOffsets: [0, 0],
 					anims: []
 				}
 			}
@@ -145,25 +164,47 @@ class CharacterEditor extends MusicBeatState
 		animList = character.animation.getNameList();
 		curAnim = animList[0];
 
-		animDropDown = new FlxUIDropDownMenu(1115, 75 / 2, FlxUIDropDownMenu.makeStrIdLabelArray(animList, false), function(anim:String)
+		animDropDown = new FlxUIDropDownMenu(uiBox.x + uiBox.width / 8, 75 / 2, FlxUIDropDownMenu.makeStrIdLabelArray(animList, false), function(anim:String)
 		{
 			character.playAnim(anim, true);
 			curAnim = anim;
-			if (character != null && character.animOffsets.exists(curAnim))
+
+			if (character != null || character.animOffsets.exists(curAnim))
+			{
 				offsetsTextBox.text = character.animOffsets.get(curAnim)[0] + "," + character.animOffsets.get(curAnim)[1];
+				for (anim in json.anims)
+				{
+					if (curAnim == anim.name)
+					{
+						loopedCheckBox.checked = anim.looped;
+					}
+				}
+			}
 		});
-		animDropDown.screenCenter(X);
-		animDropDown.x += 530;
 		animDropDown.setSize(300, 150);
+		loopedCheckBox = new FlxUICheckBox(uiBox.x + uiBox.width / 1.5, 40, null, null, "Looped", 50, null, function()
+		{
+			var i:Int = 0;
+			for (anim in json.anims)
+			{
+				if (anim.name == curAnim)
+				{
+					anim.looped = loopedCheckBox.checked;
+					trace(anim.looped);
+				}
+			}
+		});
 		var stage:Stage = new Stage("stage");
 		add(stage);
 		add(character);
 		add(uiBox);
 		characterTab.add(saveBut);
 		characterTab.add(characterDropDown);
+		AnimTab.add(indicesTextBox);
+		AnimTab.add(loopedCheckBox);
 		AnimTab.add(offsetsTextBox);
-		AnimTab.add(animDropDown);
 		AnimTab.add(addAnimBut);
+		AnimTab.add(animDropDown);
 		add(characterTab);
 
 		add(AnimTab);
@@ -180,6 +221,7 @@ class CharacterEditor extends MusicBeatState
 	{
 		json.anims.push({
 			name: name,
+			indices: null,
 			nameInXml: xmlName,
 			offsets: [0, 0],
 			frameRate: fps,

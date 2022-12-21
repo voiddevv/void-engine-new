@@ -33,14 +33,14 @@ class AddAnim extends MusicBeatSubstate
 		box.resize(450, 200);
 		box.screenCenter();
 		add(box);
-        var closeBut = new FlxButton(box.x + box.width - 35,box.y + 5,"",function () {
-            close();
-        });
-        closeBut.antialiasing = true;
-        closeBut.color = 0xFFFF0000;
-        closeBut.setGraphicSize(30,30);
-        closeBut.updateHitbox();
-
+		var closeBut = new FlxButton(box.x + box.width - 35, box.y + 5, "", function()
+		{
+			close();
+		});
+		closeBut.antialiasing = true;
+		closeBut.color = 0xFFFF0000;
+		closeBut.setGraphicSize(30, 30);
+		closeBut.updateHitbox();
 
 		var animHelpText = new FlxUIText(0, 0, 0, "Animation Name(like 'idle' 'singLEFT' 'singRIGHT')", 8);
 		animHelpText.screenCenter();
@@ -50,7 +50,7 @@ class AddAnim extends MusicBeatSubstate
 		xmlHelpText.y -= 25;
 		add(xmlHelpText);
 		animHelpText.y -= 75;
-        
+
 		var animTextBox = new FlxUIInputText(0, 0, 100, '${CharacterEditor.current.curAnim}', 16, 0xFF000000, 0xFFFFFFFF);
 		animTextBox.screenCenter();
 		animTextBox.y -= 50;
@@ -86,10 +86,11 @@ class AddAnim extends MusicBeatSubstate
 			curXmlFrame = frame;
 		});
 		xmlAnimDropDown.canScroll = true;
-		xmlAnimDropDown.screenCenter();
-		xmlAnimDropDown.y += 50;
 		add(xmlAnimDropDown);
+		xmlAnimDropDown.screenCenter(X);
+		xmlAnimDropDown.scrollFactor.set();
+        xmlAnimDropDown.y += 345;
 		trace(availableAnims);
-        add(closeBut);
+		add(closeBut);
 	}
 }

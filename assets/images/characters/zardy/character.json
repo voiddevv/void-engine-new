@@ -1,5 +1,9 @@
 {
 	"barColor": "0xad64cb",
+	"antialiasing": true,
+	"danceSteps": [
+		"idle"
+	],
 	"icon": "dad",
 	"camOffsets": [
 		100,
@@ -19,7 +23,7 @@
 		},
 		{
 			"offsets": [
-				-10,
+				50,
 				0
 			],
 			"frameRate": 24,
@@ -39,8 +43,8 @@
 		},
 		{
 			"offsets": [
-				-5,
-				45
+				-50,
+				0
 			],
 			"frameRate": 24,
 			"looped": false,
@@ -49,8 +53,8 @@
 		},
 		{
 			"offsets": [
-				0,
-				20
+				-35,
+				0
 			],
 			"frameRate": 24,
 			"looped": false,
@@ -58,13 +62,5 @@
 			"nameInXml": "Dad Sing Note RIGHT"
 		}
 	],
-	"type": "SPARROW",
-	"danceSteps": [
-		"idle"
-	],
-	"antialiasing": true,
-	"globalOffset": [
-		0,
-		0
-	]
+	"type": "SPARROW"
 }

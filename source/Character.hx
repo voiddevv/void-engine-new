@@ -25,6 +25,7 @@ typedef CharacterJson =
 	var camOffsets:Array<Int>;
 	var anims:Array<AnimData>;
 	var antialiasing:Bool;
+	var globalOffset:Array<Float>;
 }
 
 typedef AnimData =
@@ -32,6 +33,7 @@ typedef AnimData =
 	var name:String;
 	var nameInXml:String;
 	var frameRate:Int;
+	var indices:Array<Int>;
 	var looped:Bool;
 	var offsets:Array<Float>;
 }
@@ -85,10 +87,12 @@ class Character extends Sprite
 
 	public function playAnim(anim:String, force:Bool = false, time:Float = 0.0, frame:Int = 0)
 	{
+		if (json.globalOffset == null)
+			json.globalOffset = [0.0, 0.0];
 		var daOffset = animOffsets.get(anim);
 		if (animOffsets.exists(anim))
 		{
-			offset.set(daOffset[0], daOffset[1]);
+			offset.set(daOffset[0] + json.globalOffset[0], daOffset[1] + json.globalOffset[1]);
 		}
 		animation.play(anim, force, false, frame);
 	}
@@ -141,7 +145,10 @@ class Character extends Sprite
 			camOffset = json.camOffsets;
 			for (anim in json.anims)
 			{
-				animation.addByPrefix(anim.name, anim.nameInXml, anim.frameRate, anim.looped);
+				if (anim.indices != null)
+					animation.addByIndices(anim.name, anim.nameInXml, anim.indices, "", anim.frameRate, anim.looped);
+				else
+					animation.addByPrefix(anim.name, anim.nameInXml, anim.frameRate, anim.looped);
 				addOffset(anim.name, anim.offsets[0], anim.offsets[1]);
 			}
 		}
