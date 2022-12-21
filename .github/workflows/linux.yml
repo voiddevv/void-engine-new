@@ -27,6 +27,7 @@ jobs:
           sudo apt-get install gcc-multilib g++-multilib haxe -y
           mkdir "%HAXELIB_ROOT%"
           haxelib setup "%HAXELIB_ROOT%"
+          haxelib install haxeui-flixel
           haxelib git flixel https://github.com/Leather128/flixel
           haxelib install flixel-ui
           haxelib git openfl https://github.com/openfl/openfl

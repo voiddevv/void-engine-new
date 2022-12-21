@@ -22,6 +22,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: script run line haha
         run: |
+          haxelib install haxeui-flixel
           haxelib git flixel https://github.com/Leather128/flixel
           haxelib install flixel-ui
           haxelib git openfl https://github.com/openfl/openfl
